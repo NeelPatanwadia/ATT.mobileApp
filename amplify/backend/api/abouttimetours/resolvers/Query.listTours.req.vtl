@@ -1,0 +1,31 @@
+#set ($statement = "
+  SELECT 
+    t.*,
+    u.id as ""client.id"",
+    u.first_name as ""client.first_name"",
+    u.last_name as ""client.last_name"",
+    u.email_address as ""client.email_address"",
+    u.cell_phone as ""client.cell_phone"",
+    u.logo as ""client.logo"",
+    u.brokerage as ""client.brokerage"",
+    u.realtor_number as ""client.realtor_number"",
+    u.is_agent as ""client.is_agent""
+  FROM tour t
+  JOIN user u on t.client_id = u.id
+  WHERE true
+")
+
+#if( $util.isNumber($ctx.args.client_id) )
+  #set ($clientConditional = " AND t.client_id = $ctx.args.client_id")
+  #set ($statement = "$statement$clientConditional")
+#end
+
+#if( $util.isNumber($ctx.args.agent_id) )
+  #set ($agentConditional = " AND t.agent_id = $ctx.args.agent_id")
+  #set ($statement = "$statement$agentConditional")
+#end
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

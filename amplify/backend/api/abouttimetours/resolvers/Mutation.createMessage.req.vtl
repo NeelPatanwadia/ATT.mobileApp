@@ -1,0 +1,20 @@
+#set($insertId = $util.autoId())
+
+#set( $cols = [] )
+#set( $vals = [] )
+#set($ctx.args.createMessageInput.created_at = $util.time.nowEpochSeconds() )
+#set($ctx.args.createMessageInput.updated_at = $util.time.nowEpochSeconds() )
+#set($ctx.args.createMessageInput.insert_uuid = $insertId)
+
+#set($to_user = $ctx.args.createMessageInput.to_user )
+#set($from_user = $ctx.args.createMessageInput.from_user )
+#foreach( $entry in $ctx.args.createMessageInput.keySet() )
+  #set( $discard = $cols.add($entry) )
+  #set( $discard = $vals.add("'$ctx.args.createMessageInput[$entry]'") )
+#end
+#set( $valStr = $vals.toString().replace("[","(").replace("]",")") )
+#set( $colStr = $cols.toString().replace("[","(").replace("]",")") )
+{
+  "version": "2018-05-29",
+  "statements":   ["INSERT INTO message $colStr VALUES $valStr", "SELECT * FROM message WHERE insert_uuid='$insertId' ORDER BY id DESC LIMIT 0, 1"]
+}

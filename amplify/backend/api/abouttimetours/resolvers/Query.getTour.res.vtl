@@ -1,0 +1,34 @@
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+#set( $queryResults = $utils.rds.toJsonObject($ctx.result))
+
+#if($queryResults.size() > 0)
+  #set($queryResultObject = $queryResults[0][0])
+  #set($tour = {})
+  #set($client = {})
+  
+  #foreach( $key in $queryResultObject.keySet() )
+    #set($val = $queryResultObject[$key])
+
+    #if($key.contains("client."))
+      #set( $reformmatedKey = $key.replace("client.", ""))
+      #set( $discard = $client.put($reformmatedKey, $val))
+    #else 
+      #set( $discard = $tour.put($key, $val))
+    #end
+  #end
+  
+  #if(!$util.isNullOrBlank($client.id)) 
+    #set( $tour.client = $client)
+  #end
+
+  #set( $tour.stops = [] )
+
+	#if($queryResults[1].size() > 0)
+    #set ( $tour.stops = $queryResults[1] )
+  #end
+
+  $utils.toJson($tour)
+#end

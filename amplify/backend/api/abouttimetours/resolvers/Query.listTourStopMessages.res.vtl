@@ -1,0 +1,43 @@
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+#set( $queryResults = $utils.rds.toJsonObject($ctx.result))
+#set( $resultSet = [] )
+
+#if($queryResults.size() > 0)
+	#if($queryResults[0].size() > 0)
+
+    #foreach( $message in  $queryResults[0])
+      #set($resultObject = {})
+      #set($toUser = {})
+      #set($fromUser = {})
+      
+      #foreach( $key in $message.keySet() )
+        #set($val = $message[$key])
+
+        #if($key.contains("recipient."))
+          #set( $reformmatedKey = $key.replace("recipient.", ""))
+          #set( $discard = $recipient.put($reformmatedKey, $val))
+        #elseif($key.contains("sender."))
+          #set( $reformmatedKey = $key.replace("sender.", ""))
+          #set( $discard = $sender.put($reformmatedKey, $val))
+        #else 
+          #set( $discard = $resultObject.put($key, $val))
+        #end
+      #end
+      
+      #if(!$util.isNullOrBlank($recipient.id)) 
+      	#set( $resultObject.recipient = $toUser))
+      #end
+      
+      #if(!$util.isNullOrBlank($sender.id)) 
+      	#set( $resultObject.sender = $sender )
+      #end
+
+      #set( $discard = $resultSet.add($resultObject))
+    #end    
+  #end
+#end
+
+$utils.toJson($resultSet)

@@ -1,0 +1,19 @@
+#set($insertId = $util.autoId())
+
+#set( $cols = [] )
+#set( $vals = [] )
+
+#set($ctx.args.createPropertyOfInterestImageInput.created_at = $util.time.nowEpochSeconds() )
+#set($ctx.args.createPropertyOfInterestImageInput.updated_at = $util.time.nowEpochSeconds() )
+#set($ctx.args.createPropertyOfInterestImageInput.insert_uuid = $insertId)
+
+#foreach( $entry in $ctx.args.createPropertyOfInterestImageInput.keySet() )
+  #set( $discard = $cols.add($entry) )
+  #set( $discard = $vals.add("'$ctx.args.createPropertyOfInterestImageInput[$entry]'") )
+#end
+#set( $valStr = $vals.toString().replace("[","(").replace("]",")") )
+#set( $colStr = $cols.toString().replace("[","(").replace("]",")") )
+{
+  "version": "2018-05-29",
+  "statements":   ["INSERT INTO propertyOfInterestImage $colStr VALUES $valStr", "SELECT * FROM propertyOfInterestImage WHERE insert_uuid='$insertId' ORDER BY id DESC LIMIT 0, 1"]
+}

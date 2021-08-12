@@ -1,0 +1,26 @@
+#set ($statement = "
+  SELECT 
+    ts.*, 
+    pl.address as ""property_address"",
+
+    listing_agent.id as ""listing_agent.id"",
+    listing_agent.first_name as ""listing_agent.first_name"",
+    listing_agent.last_name as ""listing_agent.last_name"",
+    listing_agent.email_address as ""listing_agent.email_address"",
+    listing_agent.cell_phone as ""listing_agent.cell_phone"",
+    listing_agent.logo as ""listing_agent.logo"",
+    listing_agent.brokerage as ""listing_agent.brokerage"",
+    listing_agent.realtor_number as ""listing_agent.realtor_number"",
+    listing_agent.is_agent as ""listing_agent.is_agent""
+
+  FROM tourStop ts
+  JOIN propertyOfInterest poi on poi.id = ts.property_of_interest_id
+  JOIN propertyListing pl on pl.id = poi.property_listing_id
+  LEFT JOIN user listing_agent on pl.listing_agent_id = listing_agent.id
+  WHERE ts.tour_id = $ctx.args.tour_id AND ts.is_active = true AND ts.status = ""approved""
+")
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

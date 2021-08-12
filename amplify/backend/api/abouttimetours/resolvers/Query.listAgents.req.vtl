@@ -1,0 +1,4 @@
+{
+  "version": "2018-05-29",
+  "statements":   ["SELECT *, IF(validated = false AND locked_out = false, true, false) as pending, REPLACE(cell_phone, '-', '') as phone, CONCAT(first_name, ' ', last_name) as full_name FROM `user` u where is_agent=true HAVING (full_name LIKE '%$ctx.args.search_key%' OR first_name LIKE '%$ctx.args.search_key%' OR last_name LIKE '%$ctx.args.search_key%' OR email_address LIKE '%$ctx.args.search_key%' OR phone LIKE '%$ctx.args.search_key.replace('-', '').replace('-', '')%' OR brokerage LIKE '%$ctx.args.search_key%') order by pending DESC, last_name, first_name;"]
+}

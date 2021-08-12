@@ -1,0 +1,35 @@
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+#set( $queryResults = $utils.rds.toJsonObject($ctx.result))
+#set( $resultSet = [] )
+
+#if($queryResults.size() > 0)
+  #if($queryResults[0].size() > 0)
+
+    #foreach( $tourStop in  $queryResults[0])
+      #set($resultObject = {})
+      #set($listingAgent = {})
+      
+      #foreach( $key in $tourStop.keySet() )
+        #set($val = $tourStop[$key])
+
+        #if($key.contains("listing_agent."))
+          #set( $reformmatedKey = $key.replace("listing_agent.", ""))
+          #set( $discard = $listingAgent.put($reformmatedKey, $val))
+        #else 
+          #set( $discard = $resultObject.put($key, $val))
+        #end
+      #end
+      
+      #if(!$util.isNullOrBlank($listingAgent.id))
+        #set( $resultObject.listing_agent = $listingAgent )
+      #end
+
+      #set( $discard = $resultSet.add($resultObject))
+    #end    
+  #end
+#end
+
+$utils.toJson($resultSet)

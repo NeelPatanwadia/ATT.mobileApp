@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "About Time Tours",
+    "scheme": "abouttimetours",
+    "slug": "abouttimetours-mobileapp",
+    "privacy": "public",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/SplashScreen.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "package": "com.abouttimetours.mobileapp",
+      "versionCode": 106,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCgZhx2MuTbG_uK1wat7Ml2Cx6y37JMgiA"
+        }
+      }
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.abouttimetours.mobileapp",
+      "buildNumber": "106",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      }
+    },
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "js",
+        "json",
+        "jsx",
+        "ts",
+        "tsx",
+        "svg",
+        "vue"
+      ]
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
+  }
+}

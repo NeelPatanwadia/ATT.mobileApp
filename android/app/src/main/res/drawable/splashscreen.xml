@@ -1,0 +1,12 @@
+<!-- 
+    This file was created by 'expo-splash-screen' command and it's discouraged to modify it manually
+ -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:drawable="@color/splashscreen_background"/>
+
+  <item
+      android:drawable="@mipmap/splash_screen"
+      android:height="200dp"
+      android:width="225dp"
+      android:gravity="center" />
+</layer-list>

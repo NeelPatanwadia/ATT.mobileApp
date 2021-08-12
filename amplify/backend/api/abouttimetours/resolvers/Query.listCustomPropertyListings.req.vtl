@@ -1,0 +1,10 @@
+#set ($statement = "
+SELECT *
+FROM propertyListing
+WHERE is_custom_listing = true AND created_by_user_id = $ctx.args.created_by_user_id
+ORDER BY state, city, address
+")
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

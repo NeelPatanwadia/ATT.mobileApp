@@ -1,0 +1,9 @@
+#set ($statement = "
+  SELECT COUNT(*) AS count
+  FROM notification n
+  WHERE n.was_read = 0 AND is_active = 1 AND n.recipient_id = $ctx.args.user_id
+")
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

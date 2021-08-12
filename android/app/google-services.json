@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "60068903212",
+    "firebase_url": "https://abouttimetours.firebaseio.com",
+    "project_id": "abouttimetours",
+    "storage_bucket": "abouttimetours.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60068903212:android:0e1954c1a0a8d9d1a89489",
+        "android_client_info": {
+          "package_name": "com.abouttimetours.mobileapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60068903212-0ba5eoh3lgcaheu9qncpvtggb7e5elsf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOsAQceILRxuN4fslD1lTTnq5ks-nsbyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60068903212-0ba5eoh3lgcaheu9qncpvtggb7e5elsf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

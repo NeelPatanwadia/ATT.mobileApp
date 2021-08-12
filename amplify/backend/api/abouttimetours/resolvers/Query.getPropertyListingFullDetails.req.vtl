@@ -1,0 +1,81 @@
+#if($util.isNull($ctx.identity) || $util.isNull($ctx.identity.claims))
+  $util.unauthorized()
+#end
+
+#set($isStaticGroupAuthorized = $util.defaultIfNull($isStaticGroupAuthorized, false))
+
+#set( $userGroups = $util.defaultIfNull($ctx.identity.claims.get("cognito:groups"), []) )
+#set( $allowedGroups = ["Admin", "Agents"] )
+
+#foreach( $userGroup in $userGroups )
+  #if( $allowedGroups.contains($userGroup) )
+    #set( $isStaticGroupAuthorized = true )
+    #break
+  #end
+#end
+  
+#if( !($isStaticGroupAuthorized == true) )
+  $util.unauthorized()
+#end
+
+#set ($statement = "
+  SELECT 
+    pl.*, 
+    
+    listing_agent.id as ""listing_agent.id"",
+    listing_agent.first_name as ""listing_agent.first_name"",
+    listing_agent.last_name as ""listing_agent.last_name"",
+    listing_agent.email_address as ""listing_agent.email_address"",
+    listing_agent.cell_phone as ""listing_agent.cell_phone"",
+    listing_agent.logo as ""listing_agent.logo"",
+    listing_agent.brokerage as ""listing_agent.brokerage"",
+    listing_agent.realtor_number as ""listing_agent.realtor_number"",
+    listing_agent.is_agent as ""listing_agent.is_agent"",
+
+    seller.id as ""seller.id"",
+    seller.first_name as ""seller.first_name"",
+    seller.last_name as ""seller.last_name"",
+    seller.email_address as ""seller.email_address"",
+    seller.cell_phone as ""seller.cell_phone"",
+    seller.logo as ""seller.logo"",
+    seller.brokerage as ""seller.brokerage"",
+    seller.realtor_number as ""seller.realtor_number"",
+    seller.is_agent as ""seller.is_agent"",
+
+    plaod.id as ""propertyListingAgentOnlyData.id"",
+    plaod.property_listing_id as ""propertyListingAgentOnlyData.property_listing_id"",
+    plaod.private_remarks as ""propertyListingAgentOnlyData.private_remarks"",
+    plaod.owner_name as ""propertyListingAgentOnlyData.owner_name"",
+    plaod.occupant_type as ""propertyListingAgentOnlyData.occupant_type"",
+    plaod.audio_surveillance as ""propertyListingAgentOnlyData.audio_surveillance"",
+    plaod.video_surveillance as ""propertyListingAgentOnlyData.video_surveillance"",
+    plaod.sign_on_property as ""propertyListingAgentOnlyData.sign_on_property"",
+    plaod.showing_requirements as ""propertyListingAgentOnlyData.showing_requirements"",
+    plaod.showing_instructions as ""propertyListingAgentOnlyData.showing_instructions"",
+    plaod.original_list_price as ""propertyListingAgentOnlyData.original_list_price"",
+    plaod.listing_contract_date as ""propertyListingAgentOnlyData.listing_contract_date"",
+    plaod.under_contract_date as ""propertyListingAgentOnlyData.under_contract_date"",
+    plaod.agency_represent as ""propertyListingAgentOnlyData.agency_represent"",
+    plaod.listing_agreement as ""propertyListingAgentOnlyData.listing_agreement"",
+    plaod.buyer_agency_compensation as ""propertyListingAgentOnlyData.buyer_agency_compensation"",
+    plaod.commission_type as ""propertyListingAgentOnlyData.commission_type"",
+    plaod.special_listing_conditions as ""propertyListingAgentOnlyData.special_listing_conditions"",
+    plaod.listing_terms as ""propertyListingAgentOnlyData.listing_terms"",
+    plaod.preferred_escrow_company as ""propertyListingAgentOnlyData.preferred_escrow_company"",
+    plaod.listing_agent_state_license as ""propertyListingAgentOnlyData.listing_agent_state_license"",
+    plaod.listing_office as ""propertyListingAgentOnlyData.listing_office"",
+    plaod.listing_office_license as ""propertyListingAgentOnlyData.listing_office_license"",
+    plaod.listing_office_phone as ""propertyListingAgentOnlyData.listing_office_phone""
+    
+  FROM propertyListing pl
+  LEFT JOIN propertyListingAgentOnlyData plaod on pl.id = plaod.property_listing_id
+  LEFT JOIN user listing_agent on pl.listing_agent_id = listing_agent.id
+  LEFT JOIN user seller on pl.seller_id = seller.id
+  WHERE pl.id=$ctx.args.id
+  LIMIT 0, 1
+")
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

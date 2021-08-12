@@ -1,0 +1,83 @@
+#set ($statement = "
+SELECT 
+poi.id,
+poi.property_listing_id as ""property_listing_id"", 
+pl.address as ""address"", 
+t.status as ""status"",
+MAX(ts.start_time) as ""start_time"", 
+pli.media_url as ""media_url"",
+
+listing_agent.id as ""listing_agent_id"",
+listing_agent.first_name as ""listing_agent_first_name"",
+listing_agent.last_name as ""listing_agent_last_name"",
+listing_agent.email_address as ""listing_agent_email_address"",
+listing_agent.cell_phone as ""listing_agent_cell_phone"",
+listing_agent.logo as ""listing_agent_logo"",
+listing_agent.brokerage as ""listing_agent_brokerage"",
+listing_agent.is_agent as ""listing_agent_is_agent""
+
+FROM propertyOfInterest poi
+INNER JOIN user u ON u.id = poi.client_id
+INNER JOIN tourStop ts ON ts.property_of_interest_id = poi.id
+INNER JOIN tour t ON t.id = ts.tour_id
+INNER JOIN propertyListing pl ON pl.id = poi.property_listing_id
+LEFT JOIN propertyListingImage pli ON pli.property_listing_id = pl.id 
+INNER JOIN user listing_agent ON listing_agent.id = pl.listing_agent_id 
+WHERE poi.client_id = $ctx.args.client_id AND t.status =""complete"" GROUP BY poi.id, pl.address, t.status  
+
+UNION ALL 
+
+SELECT 
+poi.id,
+poi.property_listing_id as ""property_listing_id"",
+pl.address as ""address"",
+NULL as ""status"",
+NULL as ""start_time"", 
+pli.media_url as ""media_url"",
+
+listing_agent.id as ""listing_agent_id"",
+listing_agent.first_name as ""listing_agent_first_name"",
+listing_agent.last_name as ""listing_agent_last_name"",
+listing_agent.email_address as ""listing_agent_email_address"",
+listing_agent.cell_phone as ""listing_agent_cell_phone"",
+listing_agent.logo as ""listing_agent_logo"",
+listing_agent.brokerage as ""listing_agent_brokerage"",
+listing_agent.is_agent as ""listing_agent_is_agent""
+
+FROM propertyOfInterest poi 
+INNER JOIN user u ON u.id = poi.client_id
+INNER JOIN propertyListing pl ON pl.id = poi.property_listing_id
+LEFT JOIN propertyListingImage pli ON pli.property_listing_id = pl.id
+INNER JOIN user listing_agent ON listing_agent.id = pl.listing_agent_id 
+WHERE poi.client_id = $ctx.args.client_id GROUP BY poi.id 
+
+UNION ALL
+SELECT 
+poi.id,
+poi.property_listing_id as ""property_listing_id"", 
+pl.address as ""address"", 
+t.status as ""status"",
+MAX(ts.start_time) as ""start_time"", 
+pli.media_url as ""media_url"",
+
+NULL as ""listing_agent_id"",
+NULL as ""listing_agent_first_name"",
+NULL as ""listing_agent_last_name"",
+NULL as ""listing_agent_email_address"",
+NULL as ""listing_agent_cell_phone"",
+NULL as ""listing_agent_logo"",
+NULL as ""listing_agent_brokerage"",
+NULL as ""listing_agent_is_agent""
+
+FROM propertyOfInterest poi
+INNER JOIN tourStop ts ON ts.property_of_interest_id = poi.id
+INNER JOIN tour t ON t.id = ts.tour_id
+INNER JOIN propertyListing pl ON pl.id = poi.property_listing_id
+LEFT JOIN propertyListingImage pli ON pli.property_listing_id = pl.id 
+WHERE poi.client_id = $ctx.args.client_id AND t.status =""complete"" GROUP BY poi.id, pl.address, t.status  
+")
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

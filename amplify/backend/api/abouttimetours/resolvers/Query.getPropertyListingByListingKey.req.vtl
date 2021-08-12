@@ -1,0 +1,34 @@
+#set ($statement = "
+  SELECT 
+    pl.*, 
+
+    listing_agent.id as ""listing_agent.id"",
+    listing_agent.first_name as ""listing_agent.first_name"",
+    listing_agent.last_name as ""listing_agent.last_name"",
+    listing_agent.email_address as ""listing_agent.email_address"",
+    listing_agent.cell_phone as ""listing_agent.cell_phone"",
+    listing_agent.logo as ""listing_agent.logo"",
+    listing_agent.brokerage as ""listing_agent.brokerage"",
+    listing_agent.realtor_number as ""listing_agent.realtor_number"",
+    listing_agent.is_agent as ""listing_agent.is_agent"",
+
+    seller.id as ""seller.id"",
+    seller.first_name as ""seller.first_name"",
+    seller.last_name as ""seller.last_name"",
+    seller.email_address as ""seller.email_address"",
+    seller.cell_phone as ""seller.cell_phone"",
+    seller.logo as ""seller.logo"",
+    seller.brokerage as ""seller.brokerage"",
+    seller.realtor_number as ""seller.realtor_number"",
+    seller.is_agent as ""seller.is_agent""
+    
+  FROM propertyListing pl
+  LEFT JOIN user listing_agent on pl.listing_agent_id = listing_agent.id
+  LEFT JOIN user seller on pl.seller_id = seller.id
+  WHERE pl.listing_key=""$ctx.args.listing_key""
+")
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

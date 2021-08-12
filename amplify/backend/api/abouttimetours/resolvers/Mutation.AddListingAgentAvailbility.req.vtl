@@ -1,0 +1,29 @@
+#set( $cols = [] )
+#set( $vals = [] )
+#set($insertId = $util.autoId())
+#set($ctx.args.addListingAgentAvailbilityInput.insert_uuid = $insertId)
+
+#if((!$util.isNullOrEmpty($ctx.args.addListingAgentAvailbilityInput.first_slot_id))&&(!$util.isNullOrEmpty($ctx.args.addListingAgentAvailbilityInput.second_slot_id)))
+  #set($ctx.args.addListingAgentAvailbilityInput.start_datetime =$ctx.args.addListingAgentAvailbilityInput.first_slot_start_time)
+  #set($ctx.args.addListingAgentAvailbilityInput.end_datetime =$ctx.args.addListingAgentAvailbilityInput.second_slot_end_time)
+#elseif((!($util.isNullOrEmpty($ctx.args.addListingAgentAvailbilityInput.first_slot_id)))&&($util.isNullOrEmpty($ctx.args.addListingAgentAvailbilityInput.second_slot_id)))
+  #set($ctx.args.addListingAgentAvailbilityInput.start_datetime =$ctx.args.addListingAgentAvailbilityInput.first_slot_start_time)
+  #set($ctx.args.addListingAgentAvailbilityInput.second_slot_id =0)
+#elseif(($util.isNullOrEmpty($ctx.args.addListingAgentAvailbilityInput.first_slot_id))&&(!($util.isNullOrEmpty($ctx.args.addListingAgentAvailbilityInput.second_slot_id))))
+  #set($ctx.args.addListingAgentAvailbilityInput.end_datetime =$ctx.args.addListingAgentAvailbilityInput.second_slot_end_time)
+  #set($ctx.args.addListingAgentAvailbilityInput.first_slot_id =0)
+#end
+
+#foreach( $entry in $ctx.args.addListingAgentAvailbilityInput.keySet() )
+    #if($entry!="second_slot_end_time"&&$entry!="first_slot_start_time"&&$entry!="first_slot_id"&&$entry!="second_slot_id")
+        #set( $discard = $cols.add($entry) )
+        #set( $discard = $vals.add("'$ctx.args.addListingAgentAvailbilityInput[$entry]'") )
+    #end
+#end
+
+#set( $valStr = $vals.toString().replace("[","(").replace("]",")") )
+#set( $colStr = $cols.toString().replace("[","(").replace("]",")") )
+{
+  "version": "2018-05-29",
+  "statements":["DELETE FROM listingAgentAvailability WHERE  (id in ('$ctx.args.addListingAgentAvailbilityInput.first_slot_id','$ctx.args.addListingAgentAvailbilityInput.second_slot_id')) OR  ((listing_agent_id='$ctx.args.addListingAgentAvailbilityInput.listing_agent_id' and property_listing_id='$ctx.args.addListingAgentAvailbilityInput.property_listing_id') and ( is_active = true) and (start_datetime between '$ctx.args.addListingAgentAvailbilityInput.start_datetime' and '$ctx.args.addListingAgentAvailbilityInput.end_datetime'))","INSERT INTO listingAgentAvailability $colStr VALUES $valStr"]
+}

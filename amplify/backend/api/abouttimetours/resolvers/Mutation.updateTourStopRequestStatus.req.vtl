@@ -1,0 +1,17 @@
+#set( $updateList = {} )
+
+#set($ctx.args.updateTourStopRequestStatusInput.updated_at = $util.time.nowEpochSeconds() )
+
+#foreach( $entry in $ctx.args.updateTourStopRequestStatusInput.keySet() )
+  #if($util.isBoolean($ctx.args.updateTourStopRequestStatusInput[$entry]))
+    #set($isTrue = $ctx.args.updateTourStopRequestStatusInput[$entry] == true)
+    #set( $discard = $updateList.put($entry, "#if($isTrue)1#{else}0#end") )
+  #else
+    #set( $discard = $updateList.put("`$entry`", "'$ctx.args.updateTourStopRequestStatusInput[$entry]'") )
+  #end
+#end
+#set( $update = $updateList.toString().replace("{","").replace("}","") )
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE tourStop SET $update WHERE id=$ctx.args.updateTourStopRequestStatusInput.id", "SELECT ts.id, ts.status, ts.tour_id, ts.last_request_sent_by_user_id, ts.start_time, pl.listing_agent_id FROM tourStop ts JOIN propertyOfInterest poi on ts.property_of_interest_id = poi.id JOIN propertyListing pl on poi.property_listing_id = pl.id WHERE ts.id = $ctx.args.updateTourStopRequestStatusInput.id"]
+}

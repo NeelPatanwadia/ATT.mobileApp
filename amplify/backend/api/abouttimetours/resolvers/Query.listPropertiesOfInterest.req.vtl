@@ -1,0 +1,44 @@
+#set ($statement = "
+  SELECT 
+    poi.*, 
+
+    pl.id as ""property_listing.id"",
+    pl.listing_agent_id as ""property_listing.listing_agent_id"",
+    pl.seller_id as ""property_listing.seller_id"",
+    pl.listing_id as ""property_listing.listing_id"",
+    pl.listing_key as ""property_listing.listing_key"",
+    pl.address as ""property_listing.address"",
+    pl.city as ""property_listing.city"",
+    pl.state as ""property_listing.state"",
+    pl.zip as ""property_listing.zip"",
+    pl.latitude as ""property_listing.latitude"",
+    pl.longitude as ""property_listing.longitude"",
+    pl.bedrooms as ""property_listing.bedrooms"",
+    pl.bathrooms as ""property_listing.bathrooms"",
+    pl.square_feet as ""property_listing.square_feet"",
+    pl.listing_price as ""property_listing.listing_price"",
+    pl.is_custom_listing as ""property_listing.is_custom_listing"",
+    pl.status as ""property_listing.status"",
+    pli.media_url AS ""media_url"", 
+
+    u.id as ""client.id"",
+    u.first_name as ""client.first_name"",
+    u.last_name as ""client.last_name"",
+    u.email_address as ""client.email_address"",
+    u.cell_phone as ""client.cell_phone"",
+    u.logo as ""client.logo"",
+    u.brokerage as ""client.brokerage"",
+    u.realtor_number as ""client.realtor_number"",
+    u.is_agent as ""client.is_agent""
+    
+  FROM propertyOfInterest poi
+  JOIN propertyListing pl on poi.property_listing_id = pl.id
+  JOIN user u on poi.client_id = u.id
+  LEFT JOIN propertyListingImage pli ON pli.property_listing_id = pl.id
+  WHERE poi.client_id=$ctx.args.client_id GROUP BY pl.id
+")
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

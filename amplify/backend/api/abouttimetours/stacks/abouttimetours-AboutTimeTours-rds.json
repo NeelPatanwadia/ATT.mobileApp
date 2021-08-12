@@ -1,0 +1,151 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "AppSyncApiName": {
+      "Type": "String",
+      "Description": "The name of the AppSync API generated from database AboutTimeTours",
+      "Default": "AppSyncSimpleTransform"
+    },
+    "env": {
+      "Type": "String",
+      "Description": "The environment name. e.g. Dev, Test, or Production",
+      "Default": "NONE"
+    },
+    "S3DeploymentBucket": {
+      "Type": "String",
+      "Description": "The S3 bucket containing all deployment assets for the project."
+    },
+    "S3DeploymentRootKey": {
+      "Type": "String",
+      "Description": "An S3 key relative to the S3DeploymentBucket that points to the root of the deployment directory."
+    },
+    "AppSyncApiId": {
+      "Type": "String",
+      "Description": "The id of the AppSync API associated with this project."
+    },
+    "rdsRegion": {
+      "Type": "String",
+      "Description": "The region that the RDS Cluster is located in."
+    },
+    "rdsClusterIdentifier": {
+      "Type": "String",
+      "Description": "The ARN identifier denoting the RDS cluster."
+    },
+    "rdsSecretStoreArn": {
+      "Type": "String",
+      "Description": "The ARN for the Secret containing the access for the RDS cluster."
+    },
+    "rdsDatabaseName": {
+      "Type": "String",
+      "Description": "The name of the database within the RDS cluster to use."
+    }
+  },
+  "Resources": {
+    "RelationalDatabaseDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Properties": {
+        "Type": "RELATIONAL_DATABASE",
+        "Name": "AboutTimeTours_rds_DataSource",
+        "Description": "RDS Data Source Provisioned for AboutTimeTours",
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "RelationalDatabaseAccessRole",
+            "Arn"
+          ]
+        },
+        "RelationalDatabaseConfig": {
+          "RelationalDatabaseSourceType": "RDS_HTTP_ENDPOINT",
+          "RdsHttpEndpointConfig": {
+            "AwsRegion": {
+              "Ref": "rdsRegion"
+            },
+            "DbClusterIdentifier": {
+              "Ref": "rdsClusterIdentifier"
+            },
+            "DatabaseName": {
+              "Ref": "rdsDatabaseName"
+            },
+            "Schema": "mysql",
+            "AwsSecretStoreArn": {
+              "Ref": "rdsSecretStoreArn"
+            }
+          }
+        }
+      },
+      "DependsOn": [
+        "RelationalDatabaseAccessRole"
+      ]
+    },
+    "RelationalDatabaseAccessRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "role",
+              {
+                "Ref": "AppSyncApiId"
+              },
+              {
+                "Ref": "env"
+              }
+            ]
+          ]
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "RelationalDatabaseAccessPolicy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "rds-data:ExecuteSql",
+                    "rds-data:ExecuteStatement",
+                    "rds-data:DeleteItems",
+                    "rds-data:GetItems",
+                    "rds-data:InsertItems",
+                    "rds-data:UpdateItems"
+                  ],
+                  "Resource": [
+                    {
+                      "Ref": "rdsClusterIdentifier"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "secretsmanager:GetSecretValue"
+                  ],
+                  "Resource": [
+                    {
+                      "Ref": "rdsSecretStoreArn"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

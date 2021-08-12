@@ -1,0 +1,11 @@
+#set( $queryResult = $utils.rds.toJsonObject($ctx.result))
+
+#if($queryResult.size() > 0)
+	#if($queryResult[0].size() > 0)
+    	$utils.toJson($queryResult[0][0])
+    #else 
+		  #return
+    #end
+#else 
+	#return
+#end

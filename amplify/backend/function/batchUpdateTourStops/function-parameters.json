@@ -1,0 +1,20 @@
+{
+    "permissions": {
+        "api": {
+            "abouttimetours": [
+                "create",
+                "read",
+                "update",
+                "delete"
+            ]
+        },
+        "auth": {
+            "abouttimetourse62b2403": [
+                "create",
+                "read",
+                "update",
+                "delete"
+            ]
+        }
+    }
+}

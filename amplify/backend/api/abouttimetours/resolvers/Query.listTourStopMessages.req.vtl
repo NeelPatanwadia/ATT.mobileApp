@@ -1,0 +1,31 @@
+#set ($statement = "
+  SELECT 
+    m.*, 
+    recipient.id as ""recipient.id"",
+    recipient.first_name as ""recipient.first_name"",
+    recipient.last_name as ""recipient.last_name"",
+    recipient.email_address as ""recipient.email_address"",
+    recipient.cell_phone as ""recipient.cell_phone"",
+    recipient.logo as ""recipient.logo"",
+    recipient.brokerage as ""recipient.brokerage"",
+    recipient.realtor_number as ""recipient.realtor_number"",
+    recipient.is_agent as ""recipient.is_agent"",
+    sender.id as ""sender.id"",
+    sender.first_name as ""sender.first_name"",
+    sender.last_name as ""sender.last_name"",
+    sender.email_address as ""sender.email_address"",
+    sender.cell_phone as ""sender.cell_phone"",
+    sender.logo as ""sender.logo"",
+    sender.brokerage as ""sender.brokerage"",
+    sender.realtor_number as ""sender.realtor_number"",
+    sender.is_agent as ""sender.is_agent""
+  FROM message m
+  JOIN user recipient on m.to_user = recipient.id
+  JOIN user sender on m.from_user = sender.id
+  WHERE tour_stop_id=$ctx.args.tour_stop_id
+")
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

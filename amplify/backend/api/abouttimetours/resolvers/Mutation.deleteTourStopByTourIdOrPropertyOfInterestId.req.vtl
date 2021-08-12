@@ -1,0 +1,19 @@
+#set ($statement = "")
+#set ($executedId = "")
+
+#if( $util.isNumber($ctx.args.tour_id) )
+  #set ($deleteTourStopByTourId = "DELETE FROM tourStop WHERE tour_id = $ctx.args.tour_id")
+  #set ($statement = "$deleteTourStopByTourId")
+  #set ($executedId = "SELECT $ctx.args.tour_id as Tour_id")
+#end
+
+#if( $util.isNumber($ctx.args.property_of_interest_id) )
+  #set ($updateTourStopByPropertyOfInterestId = "UPDATE tourStop set property_listing_id = (select property_listing_id from propertyOfInterest where id = $ctx.args.property_of_interest_id), property_of_interest_id = NULL WHERE property_of_interest_id = $ctx.args.property_of_interest_id")
+  #set ($statement = "$updateTourStopByPropertyOfInterestId")
+  #set ($executedId = "SELECT $ctx.args.property_of_interest_id as property_of_interest_id")
+#end
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)", "$util.escapeJavaScript($executedId)"]
+}

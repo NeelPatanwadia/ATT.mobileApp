@@ -1,0 +1,8 @@
+{
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+        "authabouttimetourse62b2403",
+        "Outputs.UserPoolId"
+    ]
+  }
+}

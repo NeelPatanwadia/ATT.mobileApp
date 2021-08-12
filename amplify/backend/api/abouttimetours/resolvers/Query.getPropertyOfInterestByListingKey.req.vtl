@@ -1,0 +1,4 @@
+{
+  "version": "2018-05-29",
+  "statements":   ["SELECT poi.* FROM propertyOfInterest poi JOIN propertyListing pl on poi.property_listing_id = pl.id WHERE poi.client_id = $ctx.args.client_id AND pl.listing_key='$ctx.args.listing_key'"]
+}

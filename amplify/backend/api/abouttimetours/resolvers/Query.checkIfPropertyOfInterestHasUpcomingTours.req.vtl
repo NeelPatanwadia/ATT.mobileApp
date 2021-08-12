@@ -1,0 +1,4 @@
+{
+  "version": "2018-05-29",
+  "statements":   ["SELECT IF( EXISTS(SELECT t.id,t.status, poi.id, ts.id, ts.status FROM tour t LEFT JOIN tourStop ts ON ts.tour_id  = t.id INNER JOIN propertyOfInterest poi ON poi.id = ts.property_of_interest_id WHERE poi.id = $ctx.args.property_of_interest_id AND t.status IS NULL AND ts.is_active = true ) , (select 1), (select 0) ) AS is_in_upcoming_tour"]
+}

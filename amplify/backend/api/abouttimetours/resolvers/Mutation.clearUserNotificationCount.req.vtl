@@ -1,0 +1,6 @@
+
+#set( $update = $updateList.toString().replace("{","").replace("}","") )
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE notification SET was_read = 1, updated_at = UNIX_TIMESTAMP() WHERE recipient_id=$ctx.args.user_id AND was_read = 0", "SELECT count(*) as count FROM notification WHERE recipient_id=$ctx.args.user_id AND was_read = 0"]
+}

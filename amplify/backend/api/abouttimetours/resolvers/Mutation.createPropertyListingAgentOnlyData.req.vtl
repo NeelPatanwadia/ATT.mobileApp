@@ -1,0 +1,28 @@
+#set($insertId = $util.autoId())
+
+#set( $cols = [] )
+#set( $vals = [] )
+
+#set($ctx.args.createPropertyListingAgentOnlyDataInput.created_at = $util.time.nowEpochSeconds() )
+#set($ctx.args.createPropertyListingAgentOnlyDataInput.updated_at = $util.time.nowEpochSeconds() )
+#set($ctx.args.createPropertyListingAgentOnlyDataInput.insert_uuid = $insertId)
+
+#foreach( $entry in $ctx.args.createPropertyListingAgentOnlyDataInput.keySet() )
+  #set( $discard = $cols.add($entry) )
+
+  #if($util.isBoolean($ctx.args.createPropertyListingAgentOnlyDataInput[$entry]))
+    #set($isTrue = $ctx.args.createPropertyListingAgentOnlyDataInput[$entry] == true)
+    #set( $discard = $vals.add("#if($isTrue)1#{else}0#end") )
+  #elseif($util.isNullOrEmpty($ctx.args.createPropertyListingAgentOnlyDataInput[$entry]))
+    #set( $discard = $vals.add(null) )
+  #else
+    #set( $discard = $vals.add("'$ctx.args.createPropertyListingAgentOnlyDataInput[$entry]'") )
+  #end
+#end
+
+#set( $valStr = $vals.toString().replace("[","(").replace("]",")") )
+#set( $colStr = $cols.toString().replace("[","(").replace("]",")") )
+{
+  "version": "2018-05-29",
+  "statements":   ["INSERT INTO propertyListingAgentOnlyData $colStr VALUES $valStr", "SELECT * FROM propertyListingAgentOnlyData WHERE insert_uuid='$insertId' ORDER BY id DESC LIMIT 0, 1"]
+}

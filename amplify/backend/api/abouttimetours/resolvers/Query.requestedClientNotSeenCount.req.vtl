@@ -1,0 +1,9 @@
+#set ($statement = "
+  SELECT COUNT(*) AS count
+  FROM user n
+  WHERE n.agent_request_seen = 0 AND n.requested_agent_id = $ctx.args.agent_id 
+")
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

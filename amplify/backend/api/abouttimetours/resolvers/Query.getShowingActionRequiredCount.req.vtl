@@ -1,0 +1,16 @@
+#set ($statement = "
+  SELECT COUNT(*) AS count, pl.id as property_listing_id
+  FROM tourStop ts
+  JOIN propertyOfInterest poi ON poi.id = ts.property_of_interest_id
+  JOIN propertyListing pl ON pl.id = poi.property_listing_id
+  WHERE pl.listing_agent_id = $ctx.args.agent_id
+  AND ts.status != ""approved""
+  AND ts.status IS NOT NULL 
+  AND ts.is_active = true
+  AND (ts.last_request_sent_by_user_id != $ctx.args.agent_id OR ts.last_request_sent_by_user_id IS NULL)
+  GROUP BY pl.id
+")
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

@@ -1,0 +1,36 @@
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+#set( $queryResults = $utils.rds.toJsonObject($ctx.result))
+#set( $resultSet = [] )
+
+#if($queryResults.size() > 0)
+	#if($queryResults[0].size() > 0)
+
+    #foreach( $agent in  $queryResults[0])
+      #set($resultObject = {})
+      #set($agent_subscription = {})
+      #set($client = {})
+      
+      #foreach( $key in $agent.keySet() )
+        #set($val = $agent[$key])
+
+        #if($key.contains("subscription."))
+          #set( $reformmatedKey = $key.replace("subscription.", ""))
+          #set( $discard = $agent_subscription.put($reformmatedKey, $val))
+        #else 
+          #set( $discard = $resultObject.put($key, $val))
+        #end
+      #end
+
+      #if(!$util.isNullOrBlank($agent_subscription.original_order_id)) 
+        #set( $resultObject.agent_subscription = $agent_subscription )
+      #end
+
+      #set( $discard = $resultSet.add($resultObject))
+    #end    
+  #end
+#end
+
+$utils.toJson($resultSet)

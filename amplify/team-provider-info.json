@@ -1,0 +1,357 @@
+{
+  "testing": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-abouttimetours-testing-164906-authRole",
+      "UnauthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-testing-164906-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-testing-164906-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-abouttimetours-testing-164906-deployment",
+      "UnauthRoleName": "amplify-abouttimetours-testing-164906-unauthRole",
+      "StackName": "amplify-abouttimetours-testing-164906",
+      "StackId": "arn:aws:cloudformation:us-west-2:952364817051:stack/amplify-abouttimetours-testing-164906/fae297d0-5db1-11ea-8783-067657bdc03a",
+      "AmplifyAppId": "da5p9bl7l9gr1"
+    },
+    "categories": {
+      "api": {
+        "abouttimetours": {
+          "rdsRegion": "us-west-2",
+          "rdsClusterIdentifier": "arn:aws:rds:us-west-2:952364817051:cluster:database-testing-cluster",
+          "rdsSecretStoreArn": "arn:aws:secretsmanager:us-west-2:952364817051:secret:rds-db-credentials/cluster-KRZ5PAYMBMXYMM3KZS5SEYVJ7U/admin-Ip435o",
+          "rdsDatabaseName": "AboutTimeTours"
+        }
+      },
+      "auth": {
+        "abouttimetourse62b2403": {}
+      },
+      "function": {
+        "abouttimetourse62b2403PreSignup": {},
+        "abouttimetours": {},
+        "abouttimetourse62b2403": {},
+        "createUserIfNotExists": {},
+        "createAndInviteClient": {},
+        "batchUpdateTourStops": {},
+        "optimizeTourStops": {},
+        "createSubscription": {}
+      }
+    }
+  },
+  "awrileydev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-abouttimetours-awrileydev-154009-authRole",
+      "UnauthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-awrileydev-154009-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-awrileydev-154009-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-abouttimetours-awrileydev-154009-deployment",
+      "UnauthRoleName": "amplify-abouttimetours-awrileydev-154009-unauthRole",
+      "StackName": "amplify-abouttimetours-awrileydev-154009",
+      "StackId": "arn:aws:cloudformation:us-west-2:952364817051:stack/amplify-abouttimetours-awrileydev-154009/b2b5d240-9a21-11ea-b0d1-02f021385fe8",
+      "AmplifyAppId": "da5p9bl7l9gr1"
+    },
+    "categories": {
+      "api": {
+        "abouttimetours": {
+          "rdsRegion": "us-west-2",
+          "rdsClusterIdentifier": "arn:aws:rds:us-west-2:952364817051:cluster:database-dev",
+          "rdsSecretStoreArn": "arn:aws:secretsmanager:us-west-2:952364817051:secret:rds-db-credentials/cluster-PSCP7B5GISOVNC7IYUDFWXIYHU/root-RsI6pu",
+          "rdsDatabaseName": "awrileydev"
+        }
+      },
+      "auth": {
+        "abouttimetourse62b2403": {}
+      },
+      "function": {
+        "abouttimetourse62b2403PreSignup": {},
+        "createUserIfNotExists": {},
+        "createAndInviteClient": {},
+        "abouttimetours": {},
+        "abouttimetourse62b2403": {},
+        "batchUpdateTourStops": {},
+        "optimizeTourStops": {},
+        "createSubscription": {},
+        "getAdminUserReport": {},
+        "adminGrantSubscription": {},
+        "adminApproveAgent": {},
+        "createRdsPropertyRecords": {}
+      }
+    }
+  },
+  "neeldev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-abouttimetours-neeldev-185541-authRole",
+      "UnauthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-neeldev-185541-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-neeldev-185541-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+      "UnauthRoleName": "amplify-abouttimetours-neeldev-185541-unauthRole",
+      "StackName": "amplify-abouttimetours-neeldev-185541",
+      "StackId": "arn:aws:cloudformation:us-west-2:952364817051:stack/amplify-abouttimetours-neeldev-185541/d0348b70-5eb8-11eb-8e4d-028f431a9301",
+      "AmplifyAppId": "da5p9bl7l9gr1"
+    },
+    "categories": {
+      "api": {
+        "abouttimetours": {
+          "rdsRegion": "us-west-2",
+          "rdsClusterIdentifier": "arn:aws:rds:us-west-2:952364817051:cluster:database-dev",
+          "rdsSecretStoreArn": "arn:aws:secretsmanager:us-west-2:952364817051:secret:rds-db-credentials/cluster-PSCP7B5GISOVNC7IYUDFWXIYHU/root-RsI6pu",
+          "rdsDatabaseName": "neeldev"
+        }
+      },
+      "auth": {
+        "abouttimetourse62b2403": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "createUserIfNotExists": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/createUserIfNotExists-5937556e734276516268-build.zip"
+        },
+        "createAndInviteClient": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/createAndInviteClient-75644d6166424f774c74-build.zip"
+        },
+        "batchUpdateTourStops": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/batchUpdateTourStops-716b6755534c566e3442-build.zip"
+        },
+        "optimizeTourStops": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/optimizeTourStops-7531324f70746230416e-build.zip"
+        },
+        "createSubscription": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/createSubscription-2f7741536a2f4b564d74-build.zip"
+        },
+        "getAdminUserReport": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/getAdminUserReport-2b552b4a49374a4f4f50-build.zip"
+        },
+        "adminGrantSubscription": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/adminGrantSubscription-36726c764f412b364767-build.zip"
+        },
+        "adminApproveAgent": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/adminApproveAgent-6c327966666d7135714a-build.zip"
+        },
+        "createRdsPropertyRecords": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/createRdsPropertyRecords-3272746a4c4351576352-build.zip"
+        },
+        "chatGetMessages": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/chatGetMessages-36524276334d6a652b64-build.zip"
+        },
+        "chatSendMessage": {
+          "deploymentBucketName": "amplify-abouttimetours-neeldev-185541-deployment",
+          "s3Key": "amplify-builds/chatSendMessage-78586b6d355646763959-build.zip"
+        }
+      }
+    }
+  },
+  "parthdev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-abouttimetours-parthdev-220929-authRole",
+      "UnauthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-parthdev-220929-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-parthdev-220929-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-abouttimetours-parthdev-220929-deployment",
+      "UnauthRoleName": "amplify-abouttimetours-parthdev-220929-unauthRole",
+      "StackName": "amplify-abouttimetours-parthdev-220929",
+      "StackId": "arn:aws:cloudformation:us-west-2:952364817051:stack/amplify-abouttimetours-parthdev-220929/e326e6e0-5ed3-11eb-8a25-02ebfa1f60f5",
+      "AmplifyAppId": "da5p9bl7l9gr1"
+    },
+    "categories": {
+      "api": {
+        "abouttimetours": {
+          "rdsRegion": "us-west-2",
+          "rdsClusterIdentifier": "arn:aws:rds:us-west-2:952364817051:cluster:database-dev",
+          "rdsSecretStoreArn": "arn:aws:secretsmanager:us-west-2:952364817051:secret:rds-db-credentials/cluster-PSCP7B5GISOVNC7IYUDFWXIYHU/root-RsI6pu",
+          "rdsDatabaseName": "parthdev"
+        }
+      },
+      "auth": {
+        "abouttimetourse62b2403": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "createUserIfNotExists": {},
+        "createAndInviteClient": {},
+        "batchUpdateTourStops": {},
+        "optimizeTourStops": {},
+        "createSubscription": {},
+        "getAdminUserReport": {},
+        "adminGrantSubscription": {},
+        "adminApproveAgent": {},
+        "createRdsPropertyRecords": {}
+      }
+    }
+  },
+  "kishandev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-abouttimetours-kishandev-211404-authRole",
+      "UnauthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-kishandev-211404-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-kishandev-211404-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+      "UnauthRoleName": "amplify-abouttimetours-kishandev-211404-unauthRole",
+      "StackName": "amplify-abouttimetours-kishandev-211404",
+      "StackId": "arn:aws:cloudformation:us-west-2:952364817051:stack/amplify-abouttimetours-kishandev-211404/48164bb0-7728-11eb-9d75-06077f5b12cd",
+      "AmplifyAppId": "da5p9bl7l9gr1"
+    },
+    "categories": {
+      "api": {
+        "abouttimetours": {
+          "rdsRegion": "us-west-2",
+          "rdsClusterIdentifier": "arn:aws:rds:us-west-2:952364817051:cluster:database-dev",
+          "rdsSecretStoreArn": "arn:aws:secretsmanager:us-west-2:952364817051:secret:rds-db-credentials/cluster-PSCP7B5GISOVNC7IYUDFWXIYHU/root-RsI6pu",
+          "rdsDatabaseName": "kishandev"
+        }
+      },
+      "auth": {
+        "abouttimetourse62b2403": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "createUserIfNotExists": {
+          "deploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+          "s3Key": "amplify-builds/createUserIfNotExists-7479624778726279392f-build.zip"
+        },
+        "createAndInviteClient": {
+          "deploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+          "s3Key": "amplify-builds/createAndInviteClient-414b673978424b48676f-build.zip"
+        },
+        "batchUpdateTourStops": {
+          "deploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+          "s3Key": "amplify-builds/batchUpdateTourStops-6c6d7956483173434d36-build.zip"
+        },
+        "optimizeTourStops": {
+          "deploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+          "s3Key": "amplify-builds/optimizeTourStops-44536d6454504d426f6d-build.zip"
+        },
+        "createSubscription": {
+          "deploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+          "s3Key": "amplify-builds/createSubscription-5944737461415572386b-build.zip"
+        },
+        "getAdminUserReport": {
+          "deploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+          "s3Key": "amplify-builds/getAdminUserReport-49652f4656694366466d-build.zip"
+        },
+        "adminGrantSubscription": {
+          "deploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+          "s3Key": "amplify-builds/adminGrantSubscription-6269654c4d3472387657-build.zip"
+        },
+        "adminApproveAgent": {
+          "deploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+          "s3Key": "amplify-builds/adminApproveAgent-7876524d662f44763536-build.zip"
+        },
+        "createRdsPropertyRecords": {
+          "deploymentBucketName": "amplify-abouttimetours-kishandev-211404-deployment",
+          "s3Key": "amplify-builds/createRdsPropertyRecords-577932665368676d6438-build.zip"
+        }
+      }
+    }
+  },
+  "prashdev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-abouttimetours-prashdev-214228-authRole",
+      "UnauthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-prashdev-214228-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-prashdev-214228-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-abouttimetours-prashdev-214228-deployment",
+      "UnauthRoleName": "amplify-abouttimetours-prashdev-214228-unauthRole",
+      "StackName": "amplify-abouttimetours-prashdev-214228",
+      "StackId": "arn:aws:cloudformation:us-west-2:952364817051:stack/amplify-abouttimetours-prashdev-214228/4052b2c0-772c-11eb-a1c0-06ed1cedafa1",
+      "AmplifyAppId": "da5p9bl7l9gr1"
+    },
+    "categories": {
+      "api": {
+        "abouttimetours": {
+          "rdsRegion": "us-west-2",
+          "rdsClusterIdentifier": "arn:aws:rds:us-west-2:952364817051:cluster:database-dev",
+          "rdsSecretStoreArn": "arn:aws:secretsmanager:us-west-2:952364817051:secret:rds-db-credentials/cluster-PSCP7B5GISOVNC7IYUDFWXIYHU/root-RsI6pu",
+          "rdsDatabaseName": "prashdev"
+        }
+      },
+      "auth": {
+        "abouttimetourse62b2403": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "createUserIfNotExists": {},
+        "createAndInviteClient": {},
+        "batchUpdateTourStops": {},
+        "optimizeTourStops": {},
+        "createSubscription": {},
+        "getAdminUserReport": {},
+        "adminGrantSubscription": {},
+        "adminApproveAgent": {},
+        "createRdsPropertyRecords": {}
+      }
+    }
+  },
+  "dhruvadev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-abouttimetours-dhruvadev-225956-authRole",
+      "UnauthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-dhruvadev-225956-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::952364817051:role/amplify-abouttimetours-dhruvadev-225956-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+      "UnauthRoleName": "amplify-abouttimetours-dhruvadev-225956-unauthRole",
+      "StackName": "amplify-abouttimetours-dhruvadev-225956",
+      "StackId": "arn:aws:cloudformation:us-west-2:952364817051:stack/amplify-abouttimetours-dhruvadev-225956/121bcad0-7737-11eb-81bc-06e6d1ac322b",
+      "AmplifyAppId": "da5p9bl7l9gr1"
+    },
+    "categories": {
+      "api": {
+        "abouttimetours": {
+          "rdsRegion": "us-west-2",
+          "rdsClusterIdentifier": "arn:aws:rds:us-west-2:952364817051:cluster:database-dev",
+          "rdsSecretStoreArn": "arn:aws:secretsmanager:us-west-2:952364817051:secret:rds-db-credentials/cluster-PSCP7B5GISOVNC7IYUDFWXIYHU/root-RsI6pu",
+          "rdsDatabaseName": "dhruvadev"
+        }
+      },
+      "auth": {
+        "abouttimetourse62b2403": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "createUserIfNotExists": {
+          "deploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+          "s3Key": "amplify-builds/createUserIfNotExists-5937556e734276516268-build.zip"
+        },
+        "createAndInviteClient": {
+          "deploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+          "s3Key": "amplify-builds/createAndInviteClient-75644d6166424f774c74-build.zip"
+        },
+        "batchUpdateTourStops": {
+          "deploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+          "s3Key": "amplify-builds/batchUpdateTourStops-716b6755534c566e3442-build.zip"
+        },
+        "optimizeTourStops": {
+          "deploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+          "s3Key": "amplify-builds/optimizeTourStops-7531324f70746230416e-build.zip"
+        },
+        "createSubscription": {
+          "deploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+          "s3Key": "amplify-builds/createSubscription-2f7741536a2f4b564d74-build.zip"
+        },
+        "getAdminUserReport": {
+          "deploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+          "s3Key": "amplify-builds/getAdminUserReport-2b552b4a49374a4f4f50-build.zip"
+        },
+        "adminGrantSubscription": {
+          "deploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+          "s3Key": "amplify-builds/adminGrantSubscription-36726c764f412b364767-build.zip"
+        },
+        "adminApproveAgent": {
+          "deploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+          "s3Key": "amplify-builds/adminApproveAgent-6c327966666d7135714a-build.zip"
+        },
+        "createRdsPropertyRecords": {
+          "deploymentBucketName": "amplify-abouttimetours-dhruvadev-225956-deployment",
+          "s3Key": "amplify-builds/createRdsPropertyRecords-3272746a4c4351576352-build.zip"
+        }
+      }
+    }
+  }
+}

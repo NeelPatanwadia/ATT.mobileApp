@@ -1,0 +1,9 @@
+#set ($statement = "
+  SELECT * FROM propertyOfInterest
+  WHERE client_id=$ctx.args.client_id
+  AND seen_by_client = 0
+")
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

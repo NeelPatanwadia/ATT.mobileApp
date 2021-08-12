@@ -1,0 +1,48 @@
+#set ($statement = "
+  SELECT
+    u.*,
+    IF(validated = false AND locked_out = false, true, false) as pending, 
+    joined_user_subscriptions.is_active as ""subscription.is_active"",
+    joined_user_subscriptions.is_manual as ""subscription.is_manual"",
+    joined_user_subscriptions.subscription_original_order_id as ""subscription.original_order_id"",
+    joined_user_subscriptions.subscription_purchase_state as ""subscription.purchase_state"",
+    joined_user_subscriptions.subscription_expires_at as ""subscription.expires_at"",
+    joined_user_subscriptions.subscription_canceled_at as ""subscription.canceled_at""
+  FROM user u
+  LEFT JOIN (
+    SELECT * FROM (
+      SELECT
+        user_id, 
+        IF(`subscription_expires_at` IS NOT NULL AND UNIX_TIMESTAMP() < `subscription_expires_at` AND `subscription_canceled_at` IS NULL, 1, 0) as is_active, 
+        IF(`subscription_purchase_state` = ""MANUAL"", 1, 0) as is_manual,
+        `subscription_original_order_id`,
+        `subscription_purchase_state`,
+        `subscription_expires_at`,
+        `subscription_canceled_at`
+      FROM (
+        SELECT 
+            u.id as user_id, 
+            s.id as `subscription.id`, 
+            s.original_order_id as `subscription_original_order_id`, 
+            sr.purchase_state as `subscription_purchase_state`,
+            sr.expires_at as `subscription_expires_at`,
+            sr.canceled_at as `subscription_canceled_at`,
+            sr.id as `receipt.id`
+        FROM user u
+        LEFT JOIN subscription s on u.id = s.user_id
+        LEFT JOIN subscriptionReceipt sr on s.id = sr.subscription_id
+        ORDER BY `receipt.id` DESC
+      ) as t
+      GROUP BY `subscription.id`
+      ORDER BY user_id, is_active DESC
+    ) as user_subscriptions GROUP BY user_id
+  ) as joined_user_subscriptions
+  ON u.id = joined_user_subscriptions.user_id
+  WHERE u.is_agent = true
+  ORDER BY pending DESC, u.last_name, u.first_name;
+")
+
+{
+    "version": "2018-05-29",
+    "statements": ["$util.escapeJavaScript($statement)"]
+}

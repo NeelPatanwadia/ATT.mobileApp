@@ -1,0 +1,4 @@
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE user SET agent_id = null, agent_notes = null, updated_at = UNIX_TIMESTAMP() WHERE id=$ctx.args.user_id", "SELECT * FROM user WHERE id=$ctx.args.user_id"]
+}

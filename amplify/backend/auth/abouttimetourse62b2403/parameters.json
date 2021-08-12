@@ -1,0 +1,69 @@
+{
+    "identityPoolName": "abouttimetourse62b2403_identitypool_e62b2403",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "aboutte62b2403",
+    "userPoolName": "abouttimetourse62b2403_userpool_e62b2403",
+    "autoVerifiedAttributes": [
+        "email"
+    ],
+    "mfaConfiguration": "OPTIONAL",
+    "mfaTypes": [
+        "SMS Text Message"
+    ],
+    "smsAuthenticationMessage": "Your verification code for the About Time Tours app is {####}",
+    "smsVerificationMessage": "Your verification code for the About Time Tours app is {####}",
+    "emailVerificationSubject": "Your About Time Tours Verification Code",
+    "emailVerificationMessage": "Your About Time Tours verification code is: {####}",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [],
+    "requiredAttributes": [
+        "email"
+    ],
+    "userpoolClientGenerateSecret": true,
+    "userpoolClientRefreshTokenValidity": "30",
+    "userpoolClientWriteAttributes": [
+        "phone_number",
+        "email"
+    ],
+    "userpoolClientReadAttributes": [
+        "email",
+        "phone_number"
+    ],
+    "userpoolClientLambdaRole": "aboutte62b2403_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": false,
+    "resourceName": "abouttimetourse62b2403",
+    "authSelections": "identityPoolAndUserPool",
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    },
+    "unauthRoleArn": {
+        "Fn::GetAtt": [
+            "UnauthRole",
+            "Arn"
+        ]
+    },
+    "useDefault": "manual",
+    "usernameAttributes": [
+        "email"
+    ],
+    "userPoolGroupList": [
+        "Admin",
+        "Agents"
+    ],
+    "dependsOn": [],
+    "thirdPartyAuth": false,
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": "{}",
+    "hostedUI": false,
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [],
+    "serviceName": "Cognito",
+    "authProviders": []
+}

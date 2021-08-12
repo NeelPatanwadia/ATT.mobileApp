@@ -1,0 +1,20 @@
+#set( $updateList = {} )
+
+#foreach( $entry in $ctx.args.updateUserInput.keySet() )
+  #if( $util.isNullOrBlank($ctx.args.updateUserInput[$entry]) )
+  	#set( $discard = $updateList.put($entry, $util.defaultIfNullOrEmpty($ctx.args.updateUserInput[$entry], null)) )
+  #elseif($util.isBoolean($ctx.args.updateUserInput[$entry]))
+    #set($isTrue = $ctx.args.updateUserInput[$entry] == true)
+    #set( $discard = $updateList.put($entry, "#if($isTrue)1#{else}0#end") )
+  #else
+    #set( $discard = $updateList.put($entry, "'$ctx.args.updateUserInput[$entry]'") )
+  #end
+#end
+
+#set($ctx.args.updateUserInput.updated_at = $util.time.nowEpochSeconds() )
+
+#set( $update = $updateList.toString().replace("{","").replace("}","") )
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE user SET $update WHERE id=$ctx.args.updateUserInput.id", "SELECT * FROM user WHERE id=$ctx.args.updateUserInput.id"]
+}

@@ -1,0 +1,25 @@
+#set ($statement = "
+    SELECT *
+    FROM tourStop ts
+    INNER JOIN propertyOfInterest poi ON poi.id = ts.property_of_interest_id
+    WHERE 
+    (   
+      (
+        (ts.start_time >= $ctx.args.start_time  AND ts.start_time < $ctx.args.end_time )
+        OR
+        (((ts.duration * 3600) + ts.start_time) > $ctx.args.start_time  AND  ((ts.duration * 3600) + ts.start_time) < $ctx.args.end_time)
+      )
+      OR
+      (
+        (ts.start_time <= $ctx.args.start_time AND ((ts.duration * 3600) + ts.start_time) > $ctx.args.start_time)
+        OR
+        (ts.start_time < $ctx.args.end_time AND ((ts.duration * 3600) + ts.start_time) >= $ctx.args.end_time)
+      )
+    )
+    AND poi.property_listing_id = $ctx.args.property_listing_id AND ts.is_active = 1
+")
+
+{
+  "version": "2018-05-29",
+  "statements":   ["$util.escapeJavaScript($statement)"]
+}

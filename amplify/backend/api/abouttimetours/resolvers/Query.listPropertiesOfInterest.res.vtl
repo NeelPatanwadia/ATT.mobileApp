@@ -1,0 +1,43 @@
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+#set( $queryResults = $utils.rds.toJsonObject($ctx.result))
+#set( $resultSet = [] )
+
+#if($queryResults.size() > 0)
+	#if($queryResults[0].size() > 0)
+
+    #foreach( $propertyOfInterest in  $queryResults[0])
+      #set($resultObject = {})
+      #set($propertyListing = {})
+      #set($client = {})
+      
+      #foreach( $key in $propertyOfInterest.keySet() )
+        #set($val = $propertyOfInterest[$key])
+
+        #if($key.contains("property_listing."))
+          #set( $reformmatedKey = $key.replace("property_listing.", ""))
+          #set( $discard = $propertyListing.put($reformmatedKey, $val))
+        #elseif($key.contains("client."))
+          #set( $reformmatedKey = $key.replace("client.", ""))
+          #set( $discard = $client.put($reformmatedKey, $val))
+        #else 
+          #set( $discard = $resultObject.put($key, $val))
+        #end
+      #end
+      
+      #if(!$util.isNullOrBlank($client.id)) 
+        #set( $resultObject.client = $client)
+      #end
+      
+      #if(!$util.isNullOrBlank($propertyListing.id)) 
+        #set( $resultObject.property_listing = $propertyListing )
+      #end
+
+      #set( $discard = $resultSet.add($resultObject))
+    #end    
+  #end
+#end
+
+$utils.toJson($resultSet)

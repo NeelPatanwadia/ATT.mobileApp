@@ -1,0 +1,24 @@
+
+#set ($statement = "select 
+c.id as `chat_id`,
+cm.id as `message_id`,
+c.listing_agent_id,
+c.buying_agent_id,
+c.client_id,
+c.chat_title,
+c.property_listing_id,
+cm.send_time,
+cm.sender_name,
+cm.sender_id,
+cm.receiver_id,
+cm.message,  
+cm.seen_by_receiver
+FROM chats c 
+INNER JOIN chatMessages cm ON c.id = cm.chat_id 
+WHERE cm.receiver_id=$ctx.args.user_id  AND seen_by_receiver=0
+ORDER BY c.id DESC;")
+
+{
+  "version": "2018-05-29",
+  "statements":   ["$util.escapeJavaScript($statement)"]
+}

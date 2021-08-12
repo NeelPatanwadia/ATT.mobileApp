@@ -1,0 +1,74 @@
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+#set( $queryResults = $utils.rds.toJsonObject($ctx.result))
+#set( $resultSet = [] )
+
+#if($queryResults.size() > 0)
+	#if($queryResults[0].size() > 0)
+
+    #foreach( $showing in  $queryResults[0])
+      #set($resultObject = {})
+      #set($propertyOfInterest = {})
+      #set($propertyListing = {})
+      #set($buyingAgent = {})
+      #set($seller = {})
+      #set($listingAgent = {})
+      
+      #foreach( $key in $showing.keySet() )
+        #set($val = $showing[$key])
+
+        #if($key.contains("buying_agent."))
+          #set( $reformmatedKey = $key.replace("buying_agent.", ""))
+          #set( $discard = $buyingAgent.put($reformmatedKey, $val))
+        #else 
+          #set( $discard = $resultObject.put($key, $val))
+        #end
+        
+        #if($key.contains("property_of_interest."))
+          #set( $reformmatedKey = $key.replace("property_of_interest.", ""))
+          #set( $discard = $propertyOfInterest.put($reformmatedKey, $val))
+        #elseif($key.contains("property_listing."))
+          #set( $reformmatedKey = $key.replace("property_listing.", ""))
+          #set( $discard = $propertyListing.put($reformmatedKey, $val))
+        #elseif($key.contains("buying_agent."))
+          #set( $reformmatedKey = $key.replace("buying_agent.", ""))
+          #set( $discard = $buyingAgent.put($reformmatedKey, $val))
+        #elseif($key.contains("seller."))
+          #set( $reformmatedKey = $key.replace("seller.", ""))
+          #set( $discard = $seller.put($reformmatedKey, $val))
+        #elseif($key.contains("listing_agent."))
+          #set( $reformmatedKey = $key.replace("listing_agent.", ""))
+          #set( $discard = $listingAgent.put($reformmatedKey, $val))
+        #else 
+          #set( $discard = $resultObject.put($key, $val))
+        #end
+      #end
+      
+      #if(!$util.isNullOrBlank($buyingAgent.id)) 
+        #set( $resultObject.buying_agent = $buyingAgent)
+      #end
+      
+      #if(!$util.isNullOrBlank($propertyOfInterest.id))
+        #if(!$util.isNullOrBlank($propertyListing.id))
+          #if(!$util.isNullOrBlank($seller.id))
+            #set( $propertyListing.seller = $seller )
+          #end
+          
+          #if(!$util.isNullOrBlank($listingAgent.id))
+            #set( $propertyListing.listing_agent = $listingAgent )
+          #end
+
+          #set( $propertyOfInterest.property_listing = $propertyListing )
+        #end
+
+        #set( $resultObject.property_of_interest = $propertyOfInterest)
+      #end
+
+      #set( $discard = $resultSet.add($resultObject))
+    #end    
+  #end
+#end
+
+$utils.toJson($resultSet)

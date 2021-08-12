@@ -1,0 +1,7 @@
+{
+    "app_name" : "App Name",
+    "apple": {
+        "username" : "user@domain.com",
+        "team_name" : "Team Name"
+    }
+}

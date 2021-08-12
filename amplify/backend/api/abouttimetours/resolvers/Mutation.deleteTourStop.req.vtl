@@ -1,0 +1,4 @@
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE tourStop SET is_active = false, updated_at = UNIX_TIMESTAMP() WHERE id=$ctx.args.id", "SELECT ts.*, pl.listing_agent_id FROM tourStop ts JOIN propertyOfInterest poi on ts.property_of_interest_id = poi.id JOIN propertyListing pl on poi.property_listing_id = pl.id WHERE ts.id=$ctx.args.id"]
+}

@@ -1,0 +1,54 @@
+#set( $UpdateOnly = false)
+#set( $firstExecute = "")
+#set( $secondExecute = "")
+#set( $updateList = {} )
+#set( $cols = [] )
+#set( $vals = [] )
+#set($insertId = $util.autoId())
+#set($ctx.args.updateListingAgentAvailbilityInput.insert_uuid = $insertId)
+
+#if((!$util.isNullOrEmpty($ctx.args.updateListingAgentAvailbilityInput.first_slot_id))&&(!$util.isNullOrEmpty($ctx.args.updateListingAgentAvailbilityInput.second_slot_id)))
+  #set($ctx.args.updateListingAgentAvailbilityInput.start_datetime =$ctx.args.updateListingAgentAvailbilityInput.first_slot_start_time)
+  #set($ctx.args.updateListingAgentAvailbilityInput.end_datetime =$ctx.args.updateListingAgentAvailbilityInput.second_slot_end_time)
+#elseif((!($util.isNullOrEmpty($ctx.args.updateListingAgentAvailbilityInput.first_slot_id)))&&($util.isNullOrEmpty($ctx.args.updateListingAgentAvailbilityInput.second_slot_id)))
+  #set($ctx.args.updateListingAgentAvailbilityInput.start_datetime =$ctx.args.updateListingAgentAvailbilityInput.first_slot_start_time)
+  #set($ctx.args.updateListingAgentAvailbilityInput.second_slot_id =0)
+#elseif(($util.isNullOrEmpty($ctx.args.updateListingAgentAvailbilityInput.first_slot_id))&&(!($util.isNullOrEmpty($ctx.args.updateListingAgentAvailbilityInput.second_slot_id))))
+  #set($ctx.args.updateListingAgentAvailbilityInput.end_datetime =$ctx.args.updateListingAgentAvailbilityInput.second_slot_end_time)
+  #set($ctx.args.updateListingAgentAvailbilityInput.first_slot_id =0)
+#elseif(($util.isNullOrEmpty($ctx.args.updateListingAgentAvailbilityInput.first_slot_id))&&(($util.isNullOrEmpty($ctx.args.updateListingAgentAvailbilityInput.second_slot_id))))
+  #set($UpdateOnly = true)
+#end
+
+#if ($UpdateOnly)
+  #foreach( $entry in $ctx.args.updateListingAgentAvailbilityInput.keySet() )
+    #if($entry!="second_slot_end_time"&&$entry!="first_slot_start_time"&&$entry!="first_slot_id"&&$entry!="second_slot_id"&&$entry!="insert_uuid")
+      #if($util.isBoolean($ctx.args.updateListingAgentAvailbilityInput[$entry]))
+        #set($isTrue = $ctx.args.updateListingAgentAvailbilityInput[$entry] == true)
+        #set( $discard = $updateList.put($entry, "#if($isTrue)1#{else}0#end") )
+      #else
+        #set( $discard = $updateList.put("`$entry`", " ""$ctx.args.updateListingAgentAvailbilityInput[$entry]"" ") )
+      #end
+    #end
+  #end
+  #set( $update = $updateList.toString().replace("{","").replace("}","") )
+  #set ($firstExecute = "UPDATE listingAgentAvailability SET $update WHERE id = $ctx.args.updateListingAgentAvailbilityInput.id")
+  #set ($secondExecute = "SELECT * FROM listingAgentAvailability WHERE id = $ctx.args.updateListingAgentAvailbilityInput.id")
+#else
+  #foreach( $entry in $ctx.args.updateListingAgentAvailbilityInput.keySet() )
+      #if($entry!="second_slot_end_time"&&$entry!="first_slot_start_time"&&$entry!="first_slot_id"&&$entry!="second_slot_id"&&$entry!="id")
+          #set( $discard = $cols.add("$entry") )
+          #set( $discard = $vals.add(" ""$ctx.args.updateListingAgentAvailbilityInput[$entry]"" ") )
+      #end
+  #end
+  #set( $valStr = $vals.toString().replace("[","(").replace("]",")") )
+  #set( $colStr = $cols.toString().replace("[","(").replace("]",")") )
+
+  #set ($firstExecute = "DELETE FROM listingAgentAvailability WHERE  (id in ('$ctx.args.updateListingAgentAvailbilityInput.first_slot_id','$ctx.args.updateListingAgentAvailbilityInput.second_slot_id')) OR  ((listing_agent_id='$ctx.args.updateListingAgentAvailbilityInput.listing_agent_id' and property_listing_id='$ctx.args.updateListingAgentAvailbilityInput.property_listing_id') and ( is_active = true) and (start_datetime between '$ctx.args.updateListingAgentAvailbilityInput.start_datetime' and '$ctx.args.updateListingAgentAvailbilityInput.end_datetime'))")
+  #set ($secondExecute = "INSERT INTO listingAgentAvailability $colStr VALUES $valStr")
+#end
+
+{
+  "version": "2018-05-29",
+  "statements": [$util.toJson($firstExecute), $util.toJson($secondExecute)]
+}

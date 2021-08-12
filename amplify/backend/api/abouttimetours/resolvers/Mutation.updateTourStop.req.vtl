@@ -1,0 +1,16 @@
+#set( $updateList = {} )
+#set($ctx.args.updateTourStopInput.updated_at = $util.time.nowEpochSeconds() )
+
+#foreach( $entry in $ctx.args.updateTourStopInput.keySet() )
+  #if($util.isBoolean($ctx.args.updateTourStopInput[$entry]))
+    #set($isTrue = $ctx.args.updateTourStopInput[$entry] == true)
+    #set( $discard = $updateList.put($entry, "#if($isTrue)1#{else}0#end") )
+  #else
+    #set( $discard = $updateList.put("`$entry`", "'$ctx.args.updateTourStopInput[$entry]'") )
+  #end
+#end
+#set( $update = $updateList.toString().replace("{","").replace("}","") )
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE tourStop SET $update WHERE id=$ctx.args.updateTourStopInput.id", "SELECT * FROM tourStop WHERE id=$ctx.args.updateTourStopInput.id"]
+}

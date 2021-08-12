@@ -1,0 +1,17 @@
+#set( $updateList = {} )
+
+#set($ctx.args.updateNotificationInput.updated_at = $util.time.nowEpochSeconds() )
+
+#foreach( $entry in $ctx.args.updateNotificationInput.keySet() )
+  #if($util.isBoolean($ctx.args.updateNotificationInput[$entry]))
+    #set($isTrue = $ctx.args.updateNotificationInput[$entry] == true)
+    #set( $discard = $updateList.put($entry, "#if($isTrue)1#{else}0#end") )
+  #else
+    #set( $discard = $updateList.put($entry, "'$ctx.args.updateNotificationInput[$entry]'") )
+  #end
+#end
+#set( $update = $updateList.toString().replace("{","").replace("}","") )
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE notification SET $update WHERE id=$ctx.args.updateNotificationInput.id", "SELECT * FROM notification WHERE id=$ctx.args.updateNotificationInput.id"]
+}

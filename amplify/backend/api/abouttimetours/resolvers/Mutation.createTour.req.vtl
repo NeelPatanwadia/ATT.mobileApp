@@ -1,0 +1,24 @@
+#set($insertId = $util.autoId())
+
+#set( $cols = [] )
+#set( $vals = [] )
+
+#set($ctx.args.createTourInput.created_at = $util.time.nowEpochSeconds() )
+#set($ctx.args.createTourInput.updated_at = $util.time.nowEpochSeconds() )
+#set($ctx.args.createTourInput.insert_uuid = $insertId)
+
+#foreach( $entry in $ctx.args.createTourInput.keySet() )
+  #set( $discard = $cols.add("`$entry`") )
+  #if($util.isBoolean($ctx.args.createTourInput[$entry]))
+      #set($isTrue = $ctx.args.createTourInput[$entry] == true)
+      #set( $discard = $vals.add("#if($isTrue)1#{else}0#end") )
+  #else
+    #set( $discard = $vals.add("'$ctx.args.createTourInput[$entry]'") )
+  #end
+#end
+#set( $valStr = $vals.toString().replace("[","(").replace("]",")") )
+#set( $colStr = $cols.toString().replace("[","(").replace("]",")") )
+{
+  "version": "2018-05-29",
+  "statements":   ["INSERT INTO tour $colStr VALUES $valStr", "SELECT * FROM tour WHERE insert_uuid='$insertId' ORDER BY id DESC LIMIT 0, 1"]
+}

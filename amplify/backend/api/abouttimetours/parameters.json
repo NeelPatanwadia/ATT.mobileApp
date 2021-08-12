@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "abouttimetours",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": "false",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authabouttimetourse62b2403",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

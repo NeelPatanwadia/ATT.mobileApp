@@ -1,0 +1,4 @@
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE notification SET is_active = 0, updated_at = UNIX_TIMESTAMP() WHERE recipient_id=$ctx.args.user_id AND is_active = 1", "SELECT * FROM notification WHERE recipient_id=$ctx.args.user_id AND is_active = 1"]
+}

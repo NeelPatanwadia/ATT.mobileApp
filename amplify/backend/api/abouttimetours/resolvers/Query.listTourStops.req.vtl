@@ -1,0 +1,71 @@
+#set ($statement = "
+  SELECT 
+    ts.*, 
+
+    poi.id as ""property_of_interest.id"",
+    poi.property_listing_id as ""property_of_interest.property_listing_id"",
+    poi.client_id as ""property_of_interest.client_id"",
+    poi.status as ""property_of_interest.status"",
+    poi.notes as ""property_of_interest.notes"",
+
+    pl.id as ""property_listing.id"",
+    pl.listing_agent_id as ""property_listing.listing_agent_id"",
+    pl.seller_id as ""property_listing.seller_id"",
+    pl.listing_id as ""property_listing.listing_id"",
+    pl.listing_key as ""property_listing.listing_key"",
+    pl.address as ""property_listing.address"",
+    pl.city as ""property_listing.city"",
+    pl.state as ""property_listing.state"",
+    pl.zip as ""property_listing.zip"",
+    pl.latitude as ""property_listing.latitude"",
+    pl.longitude as ""property_listing.longitude"",
+    pl.bedrooms as ""property_listing.bedrooms"",
+    pl.bathrooms as ""property_listing.bathrooms"",
+    pl.square_feet as ""property_listing.square_feet"",
+    pl.listing_price as ""property_listing.listing_price"",
+    pl.is_custom_listing as ""property_listing.is_custom_listing"",
+    
+    client.id as ""client.id"",
+    client.first_name as ""client.first_name"",
+    client.last_name as ""client.last_name"",
+    client.email_address as ""client.email_address"",
+    client.cell_phone as ""client.cell_phone"",
+    client.logo as ""client.logo"",
+    client.brokerage as ""client.brokerage"",
+    client.realtor_number as ""client.realtor_number"",
+    client.is_agent as ""client.is_agent"",
+    
+    seller.id as ""seller.id"",
+    seller.first_name as ""seller.first_name"",
+    seller.last_name as ""seller.last_name"",
+    seller.email_address as ""seller.email_address"",
+    seller.cell_phone as ""seller.cell_phone"",
+    seller.logo as ""seller.logo"",
+    seller.brokerage as ""seller.brokerage"",
+    seller.realtor_number as ""seller.realtor_number"",
+    seller.is_agent as ""seller.is_agent"",
+    
+    listing_agent.id as ""listing_agent.id"",
+    listing_agent.first_name as ""listing_agent.first_name"",
+    listing_agent.last_name as ""listing_agent.last_name"",
+    listing_agent.email_address as ""listing_agent.email_address"",
+    listing_agent.cell_phone as ""listing_agent.cell_phone"",
+    listing_agent.logo as ""listing_agent.logo"",
+    listing_agent.brokerage as ""listing_agent.brokerage"",
+    listing_agent.realtor_number as ""listing_agent.realtor_number"",
+    listing_agent.is_agent as ""listing_agent.is_agent""
+
+  FROM tourStop ts
+  JOIN propertyOfInterest poi on poi.id = ts.property_of_interest_id
+  JOIN propertyListing pl on pl.id = poi.property_listing_id
+  LEFT JOIN user client on poi.client_id = client.id
+  LEFT JOIN user seller on pl.seller_id = seller.id
+  LEFT JOIN user listing_agent on pl.listing_agent_id = listing_agent.id
+  WHERE ts.tour_id=$ctx.args.tour_id AND ts.is_active = true
+  ORDER BY ts.order, ts.start_time, ts.id
+")
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

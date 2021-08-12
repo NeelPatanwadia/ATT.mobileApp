@@ -1,0 +1,1715 @@
+#region types
+
+#region Dynamo Models
+
+type Listing
+  @model(timestamps: null, subscriptions: null)
+  @key(
+    name: "byListingId"
+    fields: ["listing_id", "id"]
+    queryField: "getListingByListingId"
+  )
+  @key(
+    name: "byListingAgentEmail"
+    fields: ["listing_agent_email", "id"]
+    queryField: "listListingsByListingAgentEmail"
+  )
+  @key(
+    name: "bySource"
+    fields: ["source", "id"]
+    queryField: "getListingsBySource"
+  )
+  @key(
+    name: "byFlaggedForPurge"
+    fields: ["flagged_for_purge", "id"]
+    queryField: "getListingsByFlaggedForPurge"
+  )
+  @auth(rules: [ 
+      { allow: public, operations: [read] }, 
+      { allow: private, operations: [read] }
+    ])
+  {
+  id: ID! 
+  listing_key: String! 
+  listing_id: String! 
+
+  address: String 
+  full_address: String 
+  unit_number: String 
+  city: String 
+  state: String 
+  zip: String 
+  country: String 
+  county: String 
+  latitude: String 
+  longitude: String 
+  parcel_number: String
+  additional_parcels_yn: String
+  subdivision_name: String
+  zoning_description: String
+
+  listing_price: String 
+  association_fee: String
+  association_fee_frequency: String
+  
+  bedrooms: String 
+  bathrooms: String 
+  bathrooms_full: String 
+  basement_yn: Boolean
+  square_feet: Int 
+  square_feet_source: String 
+  lot_size: String 
+  lot_size_units: String 
+  garage_yn: Boolean 
+  garage_spaces: String 
+  home_type: String 
+  horse_yn: Boolean 
+  year_built: String
+  property_sub_type: String
+  new_construction_yn: Boolean 
+  on_market_date: String 
+
+  description: String 
+
+  listing_agent: String 
+  listing_agent_id: String 
+  listing_agent_email: String 
+  listing_agent_phone: String 
+  list_agent_mobile_phone: String
+  listing_office: String 
+  list_office_phone: String
+
+  rented: String 
+  association_yn: Boolean 
+  short_term_rental_permit_issued: String 
+
+  elementary_school: String 
+  middle_or_junior_school: String 
+  high_school: String 
+  senior_community_yn: Boolean 
+
+  tax_annual_amount: String 
+  tax_year: String 
+  tax_lot: String 
+  tax_map_number: String 
+  potential_tax_liability: Boolean 
+
+  assessment: Boolean 
+  
+  appliances: [String] 
+  cooling: [String] 
+  heating: [String] 
+  fireplace_features: [String] 
+  flooring: [String] 
+  interior_features: [String] 
+  rooms: [String] 
+  window_features: [String] 
+  security_features: [String] 
+  architectural_style: [String] 
+  community_features: [String] 
+  lot_features: [String] 
+  parking_features: [String] 
+  road_surface_types: [String] 
+  view: [String] 
+  roof: [String]
+  construction_materials: [String]
+  common_walls: [String]
+  levels: [String]
+  foundation_details: [String]
+  power_production_type: [String]
+  water_source: [String]
+  sewer: [String]
+
+  source: String
+  originating_system_id: String
+  status: String
+  flagged_for_purge: String
+  modification_timestamp: String
+
+  Media: [ListingMedia]
+
+  ############## Agent Only Fields ################
+  
+  special_listing_conditions: [String] @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  private_remarks: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }]) 
+  original_list_price: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  owner_name: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  occupant_type: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  audio_surveillance: Boolean @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  video_surveillance: Boolean @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  sign_on_property_yn: Boolean @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  showing_requirements: [String] @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  showing_instructions: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  listing_contract_date: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  purchase_contract_date: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  agency_represent: Boolean @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  listing_agreement: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  buyer_agency_compensation: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  buyer_agency_compensation_type: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  listing_terms: [String] @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+  preferred_escrow_company: String @auth(rules: [{ allow: groups, groups: ["Admin", "Agents"], operations: [read] }])
+}
+
+type ListingMedia {
+  ListingKey: String
+  LongDescription: String
+  MediaCategory: String
+  MediaKey: String
+  MediaModificationTimestamp: String
+  MediaURL: String
+  ShortDescription: String
+  IsPrimary: Boolean
+}
+
+#end region Dynamo Models
+
+#region RDS Types
+type message {
+  id: Int!
+  from_user: Int
+  to_user: Int
+  message: String
+  tour_stop_id: Int
+  created_at: Int
+  updated_at: Int
+  insert_uuid: String
+
+  recipient: publicUserInfo
+  sender: publicUserInfo
+}
+
+type agentTimeSlotDetails{
+  tourstop_id: Int
+  availbility_id: Int
+  listing_id: String
+  start_time:Int
+  duration: Float
+  end_datetime: Int
+  STATUS: String
+  tour_id: Int
+  listing_agent_id: Int
+  address: String
+  is_auto_approve: Boolean
+  listingAgent_first_name: String
+  listingAgent_last_name: String
+  listingAgent_email_address: String
+  listingAgent_cell_phone: String
+  listingAgent_brokerage : String
+  buyingAgent_first_name: String
+  buyingAgent_last_name: String
+  buyingAgent_email_address: String
+  buyingAgent_brokerage: String
+  buyingAgent_cell_phone : String
+  property_listing_id: Int
+  home_of_interest_id: Int
+  client_id: Int
+  tour_name: String
+  is_behalf_of_buying_agent: Boolean
+}
+
+type notification {
+  id: Int!
+  title: String
+  body: String
+  recipient_id: Int
+  ticket_id: String
+  ticket_status: String
+  ticket_message: String
+  ticket_details: String
+  sent_sms: String
+  route_info: String
+  was_read: Boolean
+  created_at: Int
+  updated_at: Int
+  is_active: Boolean
+  insert_uuid: String
+}
+
+type UserNotification {
+  id: Int
+  title: String
+  body: String
+  recipient_id: Int
+  ticket_id: String
+  ticket_status: String
+  ticket_message: String
+  ticket_details: String
+  sent_sms: String
+  sent_email: String
+  route_info: String
+  was_read: String
+  created_at: Int
+  updated_at: Int
+  is_active: String
+  insert_uuid: String
+}
+
+type propertyListing {
+  id: Int! #in
+  listing_agent_id: Int #in
+  seller_id: Int #in
+  created_by_user_id: Int #in
+  listing_id: String #in
+  listing_key: String #in
+  address: String #in
+  city: String #in
+  county: String
+  state: String #in
+  zip: String #in
+  subdivision_name: String
+  zoning: String
+  latitude: Float #in
+  longitude: Float #in
+  parcel_number: String
+  additional_parcels: Boolean
+  is_custom_listing: Boolean #in
+  listing_price: String #in
+  association_fee: String
+  association_fee_frequency: String
+  on_market_date: String
+  bedrooms: String #in
+  bathrooms: String #in
+  bathrooms_full: String
+  square_feet: String #in
+  square_feet_source: String
+  lot_size: String
+  year_built: String
+  property_sub_type: String
+  status: String #in
+  description: String 
+  rented: Boolean
+  in_association: Boolean
+  community_features: String
+  short_term_rental_permit_issued: Boolean 
+  elementary_school: String
+  middle_or_junior_school: String
+  high_school: String
+  tax_annual_amount: String
+  tax_year: String
+  tax_lot: String
+  tax_map_number: String
+  potential_tax_liability: Boolean 
+  assessment: Boolean 
+  senior_community: Boolean
+  appliances: String
+  cooling: String
+  heating: String
+  fireplace_features: String
+  flooring: String
+  interior_features: String
+  rooms: String
+  window_features: String
+  security_features: String
+  architectural_style: String
+  lot_features: String
+  garage: Boolean
+  garage_spaces: String
+  parking_features: String
+  road_surface_types: String
+  view: String
+  horse_property: Boolean
+  new_construction: Boolean
+
+  last_updated: String #in
+  source: String
+  originating_system: String
+  accessory_dwelling_unit: Boolean 
+  levels: String
+  common_walls: String
+  construction_materials: String
+  basement: Boolean
+  foundation_details: String
+  power_production_type: String
+  roof: String
+  sewer: String
+  water_source: String
+  irrigation_water_rights: Boolean
+  media_url : String
+  is_auto_approve: Boolean
+  showing_request_deadline: Int
+  deadline_start_time: Int  
+
+  created_at: Int #in
+  updated_at: Int #in
+  insert_uuid: String #in
+  
+  listing_agent: publicUserInfo #in
+  seller: publicUserInfo #in
+}
+
+type propertyListingAgentOnlyData {
+  property_listing_id: Int!
+  private_remarks: String
+  owner_name: String
+  occupant_type: String
+  audio_surveillance: Boolean 
+  video_surveillance: Boolean 
+  sign_on_property: Boolean
+  showing_requirements: String
+  showing_instructions: String
+  original_list_price: String
+  listing_contract_date: String
+  under_contract_date: String 
+  agency_represent: Boolean 
+  listing_agreement: String
+  buyer_agency_compensation: String
+  commission_type: String 
+  special_listing_conditions: String
+  listing_terms: String
+  preferred_escrow_company: String 
+  listing_agent_state_license: String
+  listing_office: String
+  listing_office_license: String 
+  listing_office_phone: String
+}
+
+type propertyListingFullDetails {
+  #TODO Make this not just a copy/paste
+  id: Int!
+  listing_agent_id: Int
+  seller_id: Int
+  created_by_user_id: Int
+  listing_id: String
+  listing_key: String
+  address: String
+  city: String
+  county: String
+  state: String
+  zip: String
+  latitude: Float
+  longitude: Float
+  is_custom_listing: Boolean
+  listing_price: String
+  bedrooms: String
+  bathrooms: String
+  square_feet: String
+  square_feet_source: String
+  lot_size: String
+  status: String
+  description: String 
+  rented: Boolean
+  in_association: Boolean
+  community_features: String
+  short_term_rental_permit_issued: Boolean 
+  elementary_school: String
+  middle_or_junior_school: String
+  high_school: String
+  tax_annual_amount: String
+  tax_year: String
+  tax_lot: String
+  tax_map_number: String
+  potential_tax_liability: Boolean 
+  assessment: Boolean 
+  senior_community: Boolean
+  appliances: String
+  cooling: String
+  heating: String
+  fireplace_features: String
+  flooring: String
+  interior_features: String
+  rooms: String
+  window_features: String
+  security_features: String
+  architectural_style: String
+  lot_features: String
+  garage: Boolean
+  garage_spaces: String
+  parking_features: String
+  road_surface_types: String
+  view: String
+  horse_property: Boolean
+  new_construction: Boolean
+
+  year_built: String
+  parcel_number: String
+  additional_parcels: Boolean
+  subdivision_name: String
+  zoning: String
+  property_sub_type: String
+  association_fee: String
+  association_fee_frequency: String
+
+  last_updated: String
+  source: String
+  originating_system: String
+  accessory_dwelling_unit: Boolean 
+  levels: String
+  common_walls: String
+  construction_materials: String
+  basement: Boolean
+  foundation_details: String
+  power_production_type: String
+  roof: String
+  sewer: String
+  water_source: String
+  irrigation_water_rights: Boolean
+
+  created_at: Int
+  updated_at: Int
+  insert_uuid: String
+
+  listing_agent: publicUserInfo
+  seller: publicUserInfo
+
+  property_listing_agent_data: propertyListingAgentOnlyData
+}
+
+type LastVisitedPropertyOfInterest {
+  id: Int
+  property_listing_id: Int
+  address: String
+  status: String
+  start_time: Int
+  media_url: String
+  listing_agent_id: Int
+  listing_agent_first_name: String
+  listing_agent_last_name: String
+  listing_agent_email_address: String
+  listing_agent_cell_phone: String
+  listing_agent_logo: String
+  listing_agent_brokerage: String
+  listing_agent_is_agent: Boolean
+}
+
+type propertyOfInterest {
+  id: Int
+  property_listing_id: Int
+  client_id: Int
+  status: String
+  notes: String
+  created_at: Int
+  updated_at: Int
+  property_listing: propertyListing
+  client: publicUserInfo
+  media_url: String
+  seen_by_client: Boolean
+  active_for_client:Boolean
+  insert_uuid: String
+  client_notes: String
+  client_notes_updated_at: Int
+}
+
+type propertyListingImage {
+  id: Int!
+  property_listing_id: Int
+  long_description: String
+  media_category: String
+  media_key: String
+  media_modification_timestamp: String
+  media_url: String
+  short_description: String
+  insert_uuid: String
+  created_at: Int
+  updated_at: Int
+}
+
+type propertyOfInterestImage {
+  id: Int!
+  property_id: Int
+  file_name: String
+  created_at: Int
+  updated_at: Int
+  insert_uuid: String
+}
+
+type setting {
+  id: Int!
+  code_name: String!
+  value: String
+  insert_uuid: String
+}
+
+type subscription {
+  id: Int!
+  user_id: Int
+  original_order_id: String
+  created_at: Int
+  updated_at: Int
+  insert_uuid: String
+}
+
+type subscriptionStatus {
+  user_id: Int!
+  is_active: Boolean!
+  subscription: subscription
+  is_recurring: Boolean
+  is_trial: Boolean
+  receipt_id:Int
+}
+
+type subscriptionReceipt {
+  id: Int!
+  subscription_id: Int
+  product_id: String
+  order_id: String
+  purchase_state: String
+  purchased_at: Int
+  expires_at: Int
+  canceled_at: Int
+  expiration_intent: String
+  expected_to_renew: Boolean
+  last_notification_type: String
+  is_trial: Boolean
+  created_at: Int
+  updated_at: Int
+  receipt: String
+  insert_uuid: String
+}
+
+type tour {
+  id: Int!
+  name: String
+  status: String
+  start_time: String
+  end_time: String
+  custom_start_name: String
+  address_str: String
+  latitude: String
+  longitude: String
+  client_id: Int
+  agent_id: Int
+  current_tour_stop_id: Int
+  current_tour_stop: tourStop
+  created_at: Int
+  updated_at: Int
+  insert_uuid: String
+  client: publicUserInfo
+  stops: [tourStop]
+  seen_by_client: Boolean
+  manually_ordered_showings: Boolean
+  is_behalf_of_buying_agent: Boolean
+}
+
+type completedTourStop {
+	  id: Int!
+	  order: Int
+	  duration: Float
+	  notify_before: Boolean
+	  notify_listing_agent: Boolean
+	  notify_seller: Boolean
+	  notify_after: Boolean
+	  request_sent: Boolean
+	  showing_request_required: Boolean
+	  next_up_sent: Boolean
+	  next_up_sent_by: String
+	  have_left_sent: Boolean
+	  have_left_sent_by: String
+	  est_drive_duration: Float
+	  est_drive_str: String
+	  comments: String
+	  client_interested: String
+	  start_time: Int
+	  status: String
+	  tour_id: Int
+	  property_of_interest_id: Int
+	  last_request_sent_by_user_id: Int
+	  created_at: Int
+	  updated_at: Int
+	  insert_uuid: String
+	  is_active: Boolean
+    property_address: String
+	  listing_agent: publicUserInfo
+	}
+
+type tourStop {
+  id: Int!
+  order: Int
+  duration: Float
+  notify_before: Boolean
+  notify_listing_agent: Boolean
+  notify_seller: Boolean
+  notify_after: Boolean
+  request_sent: Boolean
+  showing_request_required: Boolean
+  next_up_sent: Boolean
+  next_up_sent_by: String
+  have_left_sent: Boolean
+  have_left_sent_by: String
+  est_drive_duration: Float
+  est_drive_str: String
+  comments: String
+  client_interested: String
+  start_time: Int
+  status: String
+  tour_id: Int
+  property_of_interest_id: Int
+  last_request_sent_by_user_id: Int
+  created_at: Int
+  updated_at: Int
+  insert_uuid: String
+  is_active: Boolean
+  property_of_interest: propertyOfInterest
+}
+
+type propertyOfInterestHasUpcomingTours{
+    is_in_upcoming_tour: Boolean
+}
+
+type user {
+  id: Int!
+  first_name: String
+  last_name: String
+  email_address: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  cell_phone: String
+  cognito_sub: String
+  cognito_identity: String
+  time_zone: String
+  subscription_id: String
+  title: String
+  logo: String
+  brokerage: String
+  realtor_number: String
+  agent_id: Int
+  agent_notes: String
+  is_agent: Boolean
+  validated: Boolean
+  onboarding_complete: Boolean
+  created_at: Int
+  updated_at: Int
+  push_token: String
+  operating_system: String
+  os_version: String
+  insert_uuid: String
+  is_test_account: Boolean
+  locked_out: Boolean
+  active_tour: tour
+  agent_subscription: agentSubscription
+  requested_agent_id: Int
+  agent_request_seen: Boolean
+  is_free_version_account:Boolean
+  is_used_free_trial:Boolean
+}
+
+type UserReportResponse {
+  status: Int
+  body: String
+}
+ 
+
+type listingAgentAvailbility {
+    id: Int
+    listing_agent_id: Int
+    property_listing_id:Int
+    start_datetime: Int
+    end_datetime: Int
+    is_active: Boolean
+    insert_uuid : String
+}
+
+#end region RDS Typs
+
+#region Generic Types
+
+type GenericCount {
+  count: Int!
+}
+
+type showing {
+  tour_stop_id: Int!
+  duration: Float
+  notify_before: Boolean
+  notify_listing_agent: Boolean
+  notify_seller: Boolean
+  notify_after: Boolean
+  request_sent: Boolean
+  comments: String
+  client_interested: String
+  start_time: Int
+  status: String
+  tour_id: Int
+  property_of_interest_id: Int
+  last_request_sent_by_user_id: Int
+
+  buying_agent: publicUserInfo
+  property_of_interest: propertyOfInterest
+}
+
+type ShowingActionRequired {
+  count: Int!
+  property_listing_id: Int!
+}
+
+type UpdateTourStopRequestStatusResponse {
+  id: Int!
+  status: String
+  last_request_sent_by_user_id: Int
+  showing_request_required: Boolean
+  tour_id: Int
+  listing_agent_id: Int
+  start_time: Int
+}
+
+type TourStopRemoveResponse {
+  id: Int!
+  listing_agent_id: Int!
+  is_active: Boolean
+}
+
+type publicUserInfo {
+  id: Int!
+  first_name: String
+  last_name: String
+  email_address: String
+  cell_phone: String
+  logo: String
+  brokerage: String
+  realtor_number: String
+  is_agent: Boolean
+  is_test_account: Boolean
+  validated: Boolean
+}
+
+type agentSubscription {
+  is_active: Boolean
+  is_manual: Boolean
+  original_order_id: String
+  purchase_state: String
+  expires_at: Int
+  canceled_at: Int
+}
+
+type CreatePropertyRecordsResponse {
+  property_listing_id: Int!
+  property_of_interest_id: Int
+  client_id: Int
+}
+
+#end region Generic Types
+
+#region chattypes
+
+type chatGetMessage {
+  message_id: Int
+  chat_id: Int
+  sender_id: Int
+  receiver_id: Int
+  sender_name: String
+  send_time: Int
+  message: String
+  seen_by_receiver: Boolean
+}
+
+type chatSendMessageOutput {
+  id: Int
+  receiver_id: Int
+  chat_id:Int
+}
+
+type newReceivedChatList {
+  chat_id: Int
+  message_id: Int
+  listing_agent_id: Int
+  buying_agent_id: Int
+  client_id: Int
+  property_listing_id: Int
+  send_time: Int
+  sender_name: String
+  sender_id: Int
+  receiver_id: Int
+  seen_by_receiver: Boolean
+  message: String
+  chat_title: String
+}
+
+type chatList {
+  id: Int
+  listing_agent_id: Int
+  buying_agent_id: Int
+  client_id: Int
+  property_listing_id: Int
+  chat_title: String
+  last_message_time: Int
+  last_message: String
+  last_message_Id: Int
+  message_seen: Boolean
+}
+#end region chattypes
+
+#end region types
+
+#region inputs
+
+#region listingAgentAvailbility input
+input AddListingAgentAvailbilityInput {
+  listing_agent_id: Int!
+	property_listing_id: Int!
+	start_datetime: Int!
+	end_datetime: Int!
+  is_active: Boolean
+  first_slot_id: Int
+  second_slot_id: Int
+  first_slot_start_time: Int
+  second_slot_end_time: Int
+  insert_uuid : String
+}
+
+input DeleteSelectedListingAgentAvailbilityInput {
+slot_id: Int!
+listing_agent_id: Int!
+property_listing_id: Int!
+selected_slot_start_time: Int!
+selected_slot_end_time: Int!
+end_datetime: Int!
+start_datetime: Int!
+insert_uuid : String
+}
+
+input UpdateListingAgentAvailbilityInput {
+  id: Int!
+  listing_agent_id: Int
+	property_listing_id: Int
+	start_datetime: Int
+	end_datetime: Int
+  is_active: Boolean
+  first_slot_id: Int
+  second_slot_id: Int
+  first_slot_start_time: Int
+  second_slot_end_time: Int
+  insert_uuid : String
+}
+
+#end region listingAgentAvailbility
+
+#region message inputs
+
+input CreateMessageInput {
+  from_user: Int
+  to_user: Int
+  message: String
+  tour_stop_id: Int
+  created_at: Int
+  updated_at: Int
+}
+
+#end region message inputs
+
+#region notification inputs
+
+input UpdateNotificationInput {
+  id: Int!
+  title: String
+  body: String
+  recipient_id: Int
+  ticket_id: String
+  ticket_status: String
+  ticket_message: String
+  ticket_details: String
+  created_at: Int
+  updated_at: Int
+  was_read: Boolean
+  is_active: Boolean
+}
+
+input CreateUserNotificationInput {
+  title: String
+  body: String
+  recipient_id: Int
+  ticket_id: String
+  ticket_status: String
+  ticket_message: String
+  ticket_details: String
+  sent_sms: Boolean
+  sent_email: Boolean
+  route_info: String
+  was_read: Boolean
+  is_active: Boolean
+}
+
+#end region notification inputs
+
+#region property inputs
+input CreatePropertyRecordsInput {
+  listing_id: String!
+  client_id: Int
+  agent_id: Int
+  fallback_phone_number: String
+}
+
+input CreatePropertyOfInterestInput {
+  property_listing_id: Int!
+  client_id: Int!
+  status: String
+  notes: String
+  created_at: Int
+  updated_at: Int
+}
+
+input CreatePropertyOfInterestImageInput {
+  property_of_interest_id: Int
+  file_name: String
+  created_at: Int
+  updated_at: Int
+}
+
+input CreatePropertyListingInput {
+  listing_agent_id: Int
+  seller_id: Int
+  created_by_user_id: Int
+  listing_id: String
+  listing_key: String
+  address: String
+  city: String
+  county: String
+  state: String
+  zip: String
+  latitude: Float
+  longitude: Float
+  is_custom_listing: Boolean
+  listing_price: String
+  on_market_date: String
+  bedrooms: String
+  bathrooms: String
+  bathrooms_full: String
+  square_feet: String
+  square_feet_source: String
+  lot_size: String
+  status: String
+  description: String 
+  rented: Boolean
+  in_association: Boolean
+  community_features: String
+  short_term_rental_permit_issued: Boolean 
+  elementary_school: String
+  middle_or_junior_school: String
+  high_school: String
+  tax_annual_amount: String
+  tax_year: String
+  tax_lot: String
+  tax_map_number: String
+  potential_tax_liability: Boolean 
+  assessment: Boolean 
+  senior_community: Boolean
+  appliances: String
+  cooling: String
+  heating: String
+  fireplace_features: String
+  flooring: String
+  interior_features: String
+  rooms: String
+  window_features: String
+  security_features: String
+  architectural_style: String
+  lot_features: String
+  garage: Boolean
+  garage_spaces: String
+  parking_features: String
+  road_surface_types: String
+  view: String
+  horse_property: Boolean
+  new_construction: Boolean
+
+  year_built: String
+  parcel_number: String
+  additional_parcels: Boolean
+  subdivision_name: String
+  zoning: String
+  property_sub_type: String
+  association_fee: String
+  association_fee_frequency: String
+
+  last_updated: String
+  source: String
+  originating_system: String
+  accessory_dwelling_unit: Boolean 
+  levels: String
+  common_walls: String
+  construction_materials: String
+  basement: Boolean
+  foundation_details: String
+  power_production_type: String
+  roof: String
+  sewer: String
+  water_source: String
+  irrigation_water_rights: Boolean
+
+  created_at: Int
+  updated_at: Int
+}
+
+input CreatePropertyListingAgentOnlyDataInput {
+  property_listing_id: Int!
+  private_remarks: String
+  owner_name: String
+  occupant_type: String
+  audio_surveillance: Boolean 
+  video_surveillance: Boolean 
+  sign_on_property: Boolean
+  showing_requirements: String
+  showing_instructions: String
+  original_list_price: String
+  listing_contract_date: String
+  under_contract_date: String 
+  agency_represent: Boolean 
+  listing_agreement: String
+  buyer_agency_compensation: String
+  commission_type: String 
+  special_listing_conditions: String
+  listing_terms: String
+  preferred_escrow_company: String 
+  listing_agent_state_license: String
+  listing_office: String
+  listing_office_license: String 
+  listing_office_phone: String
+}
+
+input CreatePropertyListingImageInput {
+  property_listing_id: Int!
+  long_description: String
+  media_category: String
+  media_key: String
+  media_modification_timestamp: String
+  media_url: String
+  short_description: String
+  is_primary: Boolean
+  created_at: Int
+  updated_at: Int
+}
+
+input UpdatePropertyOfInterestInput {
+  id: Int!
+  property_listing_id: Int
+  client_id: Int
+  status: String
+  notes: String
+  created_at: Int
+  updated_at: Int
+  seen_by_client: Boolean
+  active_for_client:Boolean
+  client_notes: String
+  client_notes_updated_at: Int
+}
+
+input UpdatePropertyListingInput {
+  id: Int!
+  listing_agent_id: Int
+  seller_id: Int
+  listing_id: String
+  listing_key: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  latitude: Float
+  longitude: Float
+  bedrooms: String
+  bathrooms: String
+  square_feet: String
+  listing_price: String
+  last_updated: String
+  created_at: Int
+  updated_at: Int
+  is_auto_approve: Boolean
+  showing_request_deadline: Int
+  deadline_start_time: Int
+}
+
+#end region property inputs
+
+#region subscription inputs
+input CreateSubscriptionInput {
+user_id: Int!
+purchase_state: String
+receipt: String!
+platform: String!
+product_id: String!
+is_restore: Boolean
+purchased_At: String
+expires_At: String
+is_Trial:Boolean
+}
+#end region subscription inputs
+
+#regeon properties of interest inputs
+type deletedPropertyOfInterstImages {
+	property_of_interest_id: Int
+}
+
+type deletedPropertyOfInterst {
+	property_of_interest_id: Int
+}
+#end regeon properties of interest inputs
+
+#region tour inputs
+
+input CreateTourInput {
+  name: String
+  status: String
+  start_time: String
+  end_time: String
+  custom_start_name: String
+  address_str: String
+  latitude: String
+  longitude: String
+  client_id: Int
+  agent_id: Int
+  current_tour_stop_id: Int
+  created_at: Int
+  updated_at: Int
+  seen_by_client: Boolean
+  is_behalf_of_buying_agent: Boolean
+}
+
+input UpdateTourInput {
+  id: Int!
+  name: String
+  status: String
+  start_time: String
+  end_time: String
+  custom_start_name: String
+  address_str: String
+  latitude: String
+  longitude: String
+  client_id: Int
+  agent_id: Int
+  current_tour_stop_id: Int
+  insert_uuid: String
+  created_at: Int
+  updated_at: Int
+  seen_by_client: Boolean
+  manually_ordered_showings: Boolean
+}
+
+#end region tour inputs
+
+#region tourStop inputs
+
+input BatchUpdateTourStopsInput {
+  tour_id: Int!
+  properties_of_interest: [BatchUpdateTourStopsPropertiesInput]
+}
+
+input BatchUpdateTourStopsPropertiesInput {
+  property_of_interest_id: Int!
+  is_custom_listing: Boolean
+}
+
+input CreateTourStopInput {
+  order: Int
+  duration: Float
+  notify_before: Boolean
+  notify_listing_agent: Boolean
+  notify_seller: Boolean
+  notify_after: Boolean
+  request_sent: Boolean
+  est_drive_duration: Float
+  est_drive_str: String
+  comments: String
+  client_interested: String
+  start_time: Int
+  status: String
+  tour_id: Int!
+  property_of_interest_id: Int!
+  showing_request_required: Boolean
+  last_request_sent_by_user_id: Int
+  created_at: Int
+  updated_at: Int
+}
+
+type DeletedMessage {
+  Tour_id: Int,
+  property_of_interest_id: Int
+}
+
+type DeletedTour {
+  Tour_id: Int
+}
+
+type DeletedTourStop {
+	Tour_id: Int,
+	property_of_interest_id: Int
+}
+
+input OptimizeTourStopsInput {
+  tour_stops: [TourStopOrderInput!]!
+}
+
+input TourStopOrderInput {
+  id: Int!
+  order: Int!
+  latitude: Float!
+  longitude: Float!
+}
+
+input UpdateTourStopInput {
+  id: Int!
+  order: Int
+  duration: Float
+  notify_before: Boolean
+  notify_listing_agent: Boolean
+  notify_seller: Boolean
+  notify_after: Boolean
+  request_sent: Boolean
+  showing_request_required: Boolean
+  next_up_sent: Boolean
+  next_up_sent_by: String
+  have_left_sent: Boolean
+  have_left_sent_by: String
+  est_drive_duration: Float
+  est_drive_str: String
+  comments: String
+  client_interested: String
+  start_time: Int
+  status: String
+  tour_id: Int
+  property_of_interest_id: Int
+}
+
+input UpdateTourStopRequestStatusInput {
+  id: Int!
+  status: String!
+  request_sent: Boolean
+  showing_request_required: Boolean
+  last_request_sent_by_user_id: Int!
+  start_time: Int
+  est_drive_duration: Float
+  est_drive_str: String
+}
+
+#end region tourStop inputs
+
+#region user inputs
+input CreateUserIfNotExistsInput {
+  email_address: String
+  cognito_sub: String
+  cognito_identity: String
+  is_listing_agent: Boolean
+  first_name: String
+  last_name: String
+  cell_phone: String
+}
+
+input CreateUserInput {
+  first_name: String
+  last_name: String
+  email_address: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  cell_phone: String
+  cognito_sub: String
+  cognito_identity: String
+  time_zone: String
+  subscription_id: String
+  title: String
+  logo: String
+  brokerage: String
+  realtor_number: String
+  agent_id: Int
+  is_agent: Boolean
+  validated: Boolean
+  onboarding_complete: Boolean
+  created_at: Int
+  updated_at: Int
+  is_test_account: Boolean
+  requested_agent_id: Int
+  #client_id os only for  invite agent 
+  client_id:Int 
+}
+
+input UpdateUserInput {
+  id: Int!
+  first_name: String
+  last_name: String
+  email_address: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  cell_phone: String
+  cognito_sub: String
+  cognito_identity: String
+  time_zone: String
+  subscription_id: String
+  title: String
+  logo: String
+  brokerage: String
+  realtor_number: String
+  agent_id: Int
+  agent_notes: String
+  is_agent: Boolean
+  is_test_account: Boolean
+  onboarding_complete: Boolean
+  created_at: Int
+  updated_at: Int
+  push_token: String
+  operating_system: String
+  os_version: String
+  requested_agent_id: Int
+  agent_request_seen: Boolean
+  is_free_version_account:Boolean
+  is_used_free_trial:Boolean
+}
+
+input AdminUpdateUserInput {
+  id: Int!
+  first_name: String
+  last_name: String
+  email_address: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  cell_phone: String
+  cognito_sub: String
+  cognito_identity: String
+  time_zone: String
+  subscription_id: String
+  title: String
+  logo: String
+  brokerage: String
+  realtor_number: String
+  agent_id: Int
+  agent_notes: String
+  is_agent: Boolean
+  is_test_account: Boolean
+  validated: Boolean
+  onboarding_complete: Boolean
+  created_at: Int
+  updated_at: Int
+  push_token: String
+  operating_system: String
+  os_version: String
+  locked_out: Boolean
+  requested_agent_id: Int
+  agent_request_seen: Boolean
+}
+
+input AdminGrantSubscriptionInput {
+  user_id: Int!
+  platform: String
+  expires_at: Int
+}
+
+#end region user inputs
+
+#region chatFunctionality inputs
+input ChatSendMessageInput {
+  message: String!
+	sender_id: Int!
+	receiver_id: Int!
+	sender_name: String!
+	send_time: Int!
+	chat_id: Int
+  client_id: Int
+	buying_agent_id: Int
+  chat_title: String
+  listing_agent_id: Int
+  property_listing_id: Int
+}
+
+input ChatGetMessagesInput {
+  listing_agent_id: Int
+  property_listing_id: Int
+  buying_agent_id: Int
+  client_id: Int
+  chat_id: Int
+  user_id: Int!
+}
+#end region chatFunctionality inputs
+#end region inputs
+
+type Mutation {
+ #region chatFunctionality
+  chatSendMessage(
+    chatSendMessageInput: ChatSendMessageInput!
+  ): chatSendMessageOutput!
+  chatGetMessages(
+    chatGetMessagesInput: ChatGetMessagesInput!
+  ): [chatGetMessage!]!
+  #end region chatFunctionality
+  
+  #region listingAgentAvailbility
+  addListingAgentAvailbility(addListingAgentAvailbilityInput: AddListingAgentAvailbilityInput!): listingAgentAvailbility
+  updateListingAgentAvailbility(updateListingAgentAvailbilityInput: UpdateListingAgentAvailbilityInput!): listingAgentAvailbility
+  deleteSelectedListingAgentAvailbility(deleteSelectedListingAgentAvailbilityInput: DeleteSelectedListingAgentAvailbilityInput!): listingAgentAvailbility
+  #end region listingAgentAvailbility
+
+
+  #region messages
+  createMessage(createMessageInput: CreateMessageInput!): message
+  #end region messages
+
+  #region notifications
+  clearUserNotificationCount(user_id: Int!): GenericCount
+  removeNotifications(user_id: Int!): [notification]
+  updateNotification(
+    updateNotificationInput: UpdateNotificationInput!
+  ): notification
+  createUserNotification(
+    createUserNotificationInput: CreateUserNotificationInput
+  ): UserNotification
+  #end region
+
+  #region propertiesOfInterest
+  createPropertyOfInterest(
+    createPropertyOfInterestInput: CreatePropertyOfInterestInput!
+  ): propertyOfInterest
+  createPropertyOfInterestImage(
+    createPropertyOfInterestImageInput: CreatePropertyOfInterestImageInput!
+  ): propertyOfInterestImage
+
+  updatePropertyOfInterest(
+    updatePropertyOfInterestInput: UpdatePropertyOfInterestInput!
+  ): propertyOfInterest
+  #end region propertiesOfInterest
+
+  #region propertyListings
+  createPropertyRecords(
+    createPropertyRecordsInput: CreatePropertyRecordsInput!
+  ): CreatePropertyRecordsResponse
+    @function(name: "createRdsPropertyRecords-${env}")
+    @aws_auth(cognito_groups: ["Agents"]) 
+
+  createPropertyListing(
+    createPropertyListingInput: CreatePropertyListingInput!
+  ): propertyListing
+  createPropertyListingAgentOnlyData(
+    createPropertyListingAgentOnlyDataInput: CreatePropertyListingAgentOnlyDataInput!
+  ): propertyListing
+  createPropertyListingImage(
+    createPropertyListingImageInput: CreatePropertyListingImageInput!
+  ): propertyListingImage
+
+  updatePropertyListing(
+    updatePropertyListingInput: UpdatePropertyListingInput!
+  ): propertyListing
+
+  enableDisableAutoApprove(
+    updatePropertyListingInput: UpdatePropertyListingInput!
+  ): propertyListing
+
+  #end region propertyListings
+
+  #region subscriptions
+  createSubscription(
+    createSubscriptionInput: CreateSubscriptionInput!
+  ): subscriptionStatus!
+  #end region subscriptions
+
+  #region tours
+  createTour(createTourInput: CreateTourInput!): tour
+  updateTour(updateTourInput: UpdateTourInput!): tour
+  #end region tours
+
+  #region tourStops
+  createTourStop(createTourStopInput: CreateTourStopInput!): tourStop
+
+  deleteTourStop(id: Int!): TourStopRemoveResponse
+
+  batchUpdateTourStops(
+    batchUpdateTourStopsInput: BatchUpdateTourStopsInput!
+  ): [tourStop] @function(name: "batchUpdateTourStops-${env}")
+  optimizeTourStops(
+    optimizeTourStopsInput: OptimizeTourStopsInput!
+  ): [tourStop!]!
+
+  updateTourStop(updateTourStopInput: UpdateTourStopInput!): tourStop
+  updateTourStopRequestStatus(
+    updateTourStopRequestStatusInput: UpdateTourStopRequestStatusInput!
+  ): UpdateTourStopRequestStatusResponse
+  #end region tourStops
+
+  #regeon hard delete from database
+  #regeon tour hard delete
+  deleteTour(tour_id: Int!): DeletedTour
+  deleteMessageByTourId(tour_id: Int, property_of_interest_id: Int): DeletedMessage
+  deleteTourStopByTourIdOrPropertyOfInterestId(tour_id: Int, property_of_interest_id: Int) : DeletedTourStop
+  #end regeon tour hard delete
+
+  #regeon property of interest delete
+  deletePropertyOfInterstImagesByPropertyOfInterestId(property_of_interest_id: Int) : deletedPropertyOfInterstImages
+  deletePropertyOfInterst(property_of_interest_id: Int) : deletedPropertyOfInterst
+  #end regeon property of interest delete
+  #end regeon hard delete from database
+
+  #region users
+  createAndInviteClient(createAndInviteClientInput: CreateUserInput!): user
+  createUserIfNotExists(
+    createUserIfNotExistsInput: CreateUserIfNotExistsInput!
+  ): user
+
+  unassociateClientFromAgent(user_id: Int!): user
+
+  updateUser(updateUserInput: UpdateUserInput!): user
+
+  adminUpdateUser(updateUserInput: AdminUpdateUserInput!): user
+    @aws_auth(cognito_groups: ["Admin"])
+
+  adminApproveAgent(id: Int): user
+    @function(name: "adminApproveAgent-${env}")
+    @aws_auth(cognito_groups: ["Admin"]) 
+
+  adminGrantSubscription(
+    adminGrantSubscriptionInput: AdminGrantSubscriptionInput
+  ): subscriptionReceipt @aws_auth(cognito_groups: ["Admin"])
+  #end region users
+}
+
+type Query {
+#region chatFunctionalityGet
+  getListOfChatsByPropertyIdAndListingAgentId(
+    listing_agent_id: Int!
+    property_listing_id: Int!
+    user_id: Int!
+  ): [chatList!]!
+  getNewReceivedChatByUserId(user_id: Int!): [newReceivedChatList!]!
+#end region chatFunctionalityGet
+
+  #region AgentTimeSlotDetais
+    agentTimeSlotDetails(listing_id: String!,start_time: Int,end_datetime: Int):[agentTimeSlotDetails]
+  #end region AgentTimeSlotDetais
+
+  #region messages
+  listTourStopMessages(tour_stop_id: Int!): [message]
+  #end region messages
+
+  #region notifications
+  getUserNotificationCount(user_id: Int): GenericCount!
+  listUserNotifications(recipient_id: Int!): [notification]
+  #end region notifications
+
+  #region propertiesOfInterest
+  getPropertyOfInterest(id: Int!): propertyOfInterest
+  getPropertyOfInterestByListingKey(
+    client_id: Int!
+    listing_key: String!
+  ): propertyOfInterest
+  getPropertyOfInterestByPropertyListingId(
+    client_id: Int!
+    property_listing_id: Int!
+  ): propertyOfInterest
+
+  getPropertiesOfInterestNotSeenCount(client_id: Int!): [propertyOfInterest]
+  listLastVisitedPropertiesOfInterest(client_id: Int!): [LastVisitedPropertyOfInterest]
+  listPropertiesOfInterest(client_id: Int!): [propertyOfInterest]
+  listPropertyOfInterestImages(
+    property_of_interest_id: Int!
+  ): [propertyOfInterestImage]
+  #end region propertiesOfInterest
+
+  #region propertyListings
+  getPropertyListing(id: Int!): propertyListing
+  getPropertyListingFullDetails(id: Int!): propertyListingFullDetails @aws_auth(cognito_groups: ["Admin", "Agents"])
+  getPropertyListingByListingKey(listing_key: String!): propertyListing
+  getPropertyListingByListingId(listing_id: String!): propertyListing
+
+  listPropertyListings(listing_agent_id: Int, seller_id: Int): [propertyListing]
+  listCustomPropertyListings(created_by_user_id: Int!): [propertyListing]
+  listPropertyListingImages(property_listing_id: Int!): [propertyListingImage]
+  #end region propertyListings
+
+  #region settings
+  getSetting(code_name: String!): setting
+  #end region settings
+
+  #region showings
+  getShowingActionRequiredCount(agent_id: Int!): [ShowingActionRequired]
+
+  listPropertyShowings(property_listing_id: Int!): [showing]
+  #end region showings
+
+  #region subscriptions
+  getSubscriptionStatus(user_id: Int!): subscriptionStatus
+  getMostRecentSubscriptionReceipt(subscription_id: Int!): subscriptionReceipt
+  #end region subscriptions
+
+  #region tours
+  getTour(id: Int!): tour
+
+  listTours(client_id: Int, agent_id: Int): [tour]
+  #end region tours
+
+  #region tourStops
+  getTourStop(id: Int!): tourStop
+
+  getTourStopIfExists(property_listing_id: Int!, start_time: Int!, end_time: Int!): [tourStop]
+  
+  listTourStops(tour_id: Int!): [tourStop]
+  listTourStopsOfDeletedPropertyOfInterest(tour_id: Int, tour_stop_id: Int): [tourStop]
+  getTourStopOfCompletedTour(tour_id: Int!): [completedTourStop]
+  #end region tourStops
+
+  #regeon check if property of interest has upcomming tour
+  checkIfPropertyOfInterestHasUpcomingTours(property_of_interest_id: Int!): propertyOfInterestHasUpcomingTours
+  #end regeon check if property of interest has upcomming tour
+
+  #region users
+  getUser(id: Int!): user
+  getUserByCognitoSub(cognito_sub: String!): user
+
+  listAgents(search_key: String): [user]
+  listClients(agent_id: Int!): [user]
+  listClientsIncludeRequested(agent_id: Int!): [user]
+  requestedClientNotSeenCount(agent_id: Int): GenericCount!
+  #end region users
+
+  #region admin
+  getAdminUserReport: UserReportResponse @aws_auth(cognito_groups: ["Admin"])
+  adminListAgents: [user] @aws_auth(cognito_groups: ["Admin"])
+  #end region admin
+}
+
+type Subscription {
+  #region messages
+  onCreateTourStopMessage(tour_stop_id: Int!): message
+    @aws_subscribe(mutations: ["createMessage"])
+  #end region messages
+ 
+  #region tours
+  onCreateTour(client_id: Int!): tour @aws_subscribe(mutations: ["createTour"])
+  onTourChange(client_id: Int!): tour
+    @aws_subscribe(mutations: ["createTour", "updateTour"])
+  #end region tours
+#region chat
+  chatReceiveNewMessage(receiver_id: Int!): chatSendMessageOutput
+    @aws_subscribe(mutations: ["chatSendMessage"])
+  #end region chat
+
+  #region tourStops
+  onUpdateTourStopRequestStatus(
+    tour_id: Int!
+  ): UpdateTourStopRequestStatusResponse
+    @aws_subscribe(mutations: ["updateTourStopRequestStatus"])
+  #end region tourStops
+
+  #region showings
+  onUpdateShowingRequestStatus(
+    listing_agent_id: Int!
+  ): UpdateTourStopRequestStatusResponse
+    @aws_subscribe(mutations: ["updateTourStopRequestStatus"])
+  
+  onShowingRemoved(listing_agent_id: Int!): TourStopRemoveResponse
+    @aws_subscribe(mutations: ["deleteTourStop"])
+  #end region showings
+
+  #region propertiesOfInterest
+  onPropertyOfInterestChange(client_id: Int!): propertyOfInterest
+    @aws_subscribe(
+      mutations: ["createPropertyOfInterest", "updatePropertyOfInterest"]
+    )
+
+  onPropertyRecordsCreatedForClient(client_id: Int!): CreatePropertyRecordsResponse
+    @aws_subscribe(
+      mutations: ["createPropertyRecords"]
+    )
+  #end region propertiesOfInterest
+
+  # region updateuser
+    onUpdateUser(id: Int!): user
+      @aws_subscribe(
+        mutations: ["updateUser"]
+        )
+  #end region updateuser
+
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}

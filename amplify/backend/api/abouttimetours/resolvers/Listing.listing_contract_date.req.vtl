@@ -1,0 +1,28 @@
+#if( $util.isNullOrEmpty($ctx.source) )
+  #return
+#end
+
+#if($util.isNull($ctx.identity) || $util.isNull($ctx.identity.claims))
+  $util.unauthorized()
+#end
+
+#set($isStaticGroupAuthorized = $util.defaultIfNull($isStaticGroupAuthorized, false))
+
+#set( $userGroups = $util.defaultIfNull($ctx.identity.claims.get("cognito:groups"), []) )
+#set( $allowedGroups = ["Admin", "Agents"] )
+
+#foreach( $userGroup in $userGroups )
+  #if( $allowedGroups.contains($userGroup) )
+    #set( $isStaticGroupAuthorized = true )
+    #break
+  #end
+#end
+  
+#if( !($isStaticGroupAuthorized == true) )
+  $util.unauthorized()
+#end
+
+{
+  "version": "2018-05-29",
+  "payload": {}
+}

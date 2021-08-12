@@ -1,0 +1,19 @@
+#set ($statement = "")
+#set ($executedId = "")
+
+#if( $util.isNumber($ctx.args.tour_id) )
+  #set ($deleteMessageByTourId = "DELETE FROM message WHERE tour_stop_id IN (SELECT id FROM tourStop WHERE tour_id = $ctx.args.tour_id)")
+  #set ($statement = "$deleteMessageByTourId")
+  #set ($executedId = "SELECT $ctx.args.tour_id as Tour_id")
+#end
+
+#if( $util.isNumber($ctx.args.property_of_interest_id) )
+  #set ($deleteMessageByPropertyOfInterestId = "DELETE FROM message where tour_stop_id IN (select id from tourStop where property_of_interest_id = $ctx.args.property_of_interest_id)")
+  #set ($statement = "$deleteMessageByPropertyOfInterestId")
+  #set ($executedId = "SELECT $ctx.args.property_of_interest_id as property_of_interest_id")
+#end
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)", "$util.escapeJavaScript($executedId)"]
+}

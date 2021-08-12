@@ -1,0 +1,37 @@
+#set( $firstExecute = "")
+#set( $secondExecute = "")
+#set( $cols = [] )
+#set( $vals = [] )
+#set($insertId = $util.autoId())
+#set($ctx.args.deleteSelectedListingAgentAvailbilityInput.insert_uuid = $insertId)
+
+#if($ctx.args.deleteSelectedListingAgentAvailbilityInput.start_datetime>=$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_start_time && $ctx.args.deleteSelectedListingAgentAvailbilityInput.end_datetime<=$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_end_time)
+   #set ($firstExecute = "UPDATE listingAgentAvailability SET is_active=0 WHERE id = $ctx.args.deleteSelectedListingAgentAvailbilityInput.slot_id")
+   #set ($secondExecute = "SELECT * FROM listingAgentAvailability WHERE id = $ctx.args.deleteSelectedListingAgentAvailbilityInput.slot_id")
+#elseif($ctx.args.deleteSelectedListingAgentAvailbilityInput.start_datetime>=$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_start_time && $ctx.args.deleteSelectedListingAgentAvailbilityInput.end_datetime>$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_end_time)
+   #set ($firstExecute = "UPDATE listingAgentAvailability SET start_datetime=$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_end_time WHERE id = $ctx.args.deleteSelectedListingAgentAvailbilityInput.slot_id")
+   #set ($secondExecute = "SELECT * FROM listingAgentAvailability WHERE id = $ctx.args.deleteSelectedListingAgentAvailbilityInput.slot_id")
+#elseif($ctx.args.deleteSelectedListingAgentAvailbilityInput.end_datetime<=$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_end_time && $ctx.args.deleteSelectedListingAgentAvailbilityInput.start_datetime<$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_start_time)
+   #set ($firstExecute = "UPDATE listingAgentAvailability SET end_datetime=$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_start_time WHERE id = $ctx.args.deleteSelectedListingAgentAvailbilityInput.slot_id")
+   #set ($secondExecute = "SELECT * FROM listingAgentAvailability WHERE id = $ctx.args.deleteSelectedListingAgentAvailbilityInput.slot_id")
+#elseif($ctx.args.deleteSelectedListingAgentAvailbilityInput.start_datetime!=$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_start_time && $ctx.args.deleteSelectedListingAgentAvailbilityInput.end_datetime!=$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_end_time)
+   #set ($firstExecute = "UPDATE listingAgentAvailability SET end_datetime=$ctx.args.deleteSelectedListingAgentAvailbilityInput.selected_slot_start_time WHERE id = $ctx.args.deleteSelectedListingAgentAvailbilityInput.slot_id")
+   #set( $discard = $cols.add("listing_agent_id"))
+   #set( $discard = $cols.add("property_listing_id"))
+   #set( $discard = $cols.add("start_datetime"))
+   #set( $discard = $cols.add("end_datetime"))
+   #set( $discard = $cols.add("insert_uuid"))
+   #set( $discard = $vals.add(" ""$ctx.args.deleteSelectedListingAgentAvailbilityInput[""listing_agent_id""]"" ") )
+   #set( $discard = $vals.add(" ""$ctx.args.deleteSelectedListingAgentAvailbilityInput[""property_listing_id""]"" ") )
+   #set( $discard = $vals.add(" ""$ctx.args.deleteSelectedListingAgentAvailbilityInput[""selected_slot_end_time""]"" ") )
+   #set( $discard = $vals.add(" ""$ctx.args.deleteSelectedListingAgentAvailbilityInput[""end_datetime""]"" ") )
+   #set( $discard = $vals.add(" ""$ctx.args.deleteSelectedListingAgentAvailbilityInput[""insert_uuid""]"" ") )
+   #set( $valStr = $vals.toString().replace("[","(").replace("]",")") )
+   #set( $colStr = $cols.toString().replace("[","(").replace("]",")") )
+   #set ($secondExecute = "INSERT INTO listingAgentAvailability $colStr VALUES $valStr")
+#end
+
+{
+  "version": "2018-05-29",
+  "statements": [$util.toJson($firstExecute), $util.toJson($secondExecute)]
+}

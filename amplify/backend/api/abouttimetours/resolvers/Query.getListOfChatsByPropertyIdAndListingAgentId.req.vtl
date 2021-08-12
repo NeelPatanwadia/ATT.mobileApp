@@ -1,0 +1,40 @@
+
+#set ($statement = "
+select 
+`id`,
+`chat_title`,
+`listing_agent_id`,
+`client_id`,
+`buying_agent_id`,
+`property_listing_id`,
+`last_message_time`,
+`last_message`,
+`last_message_Id`,
+IF(`seen_by_receiver`=0 AND  receiver_id= $ctx.args.user_id , 0, 1) as message_seen
+from(
+select
+c.id as `id`,
+c.listing_agent_id as `listing_agent_id`,
+c.buying_agent_id as `buying_agent_id`,
+c.client_id as `client_id`,
+c.chat_title as `chat_title`,
+c.property_listing_id as `property_listing_id`,
+cm.send_time as `last_message_time`,
+cm.message as `last_message`,  
+cm.id as `last_message_Id`,
+cm.seen_by_receiver as `seen_by_receiver`,
+cm.receiver_id as `receiver_id`
+FROM chats c 
+INNER JOIN chatMessages cm ON c.id = cm.chat_id 
+WHERE c.listing_agent_id=$ctx.args.listing_agent_id AND c.property_listing_id=$ctx.args.property_listing_id
+ORDER BY `last_message_Id` DESC
+)as t
+GROUP BY `id`
+;
+")
+
+
+{
+  "version": "2018-05-29",
+  "statements":   ["$util.escapeJavaScript($statement)"]
+}

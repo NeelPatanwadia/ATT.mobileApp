@@ -1,0 +1,35 @@
+#set ($statement = "
+  SELECT
+   user_id, 
+   IF(`receipt.expires_at` IS NOT NULL AND UNIX_TIMESTAMP() < `receipt.expires_at` AND `receipt.canceled_at` IS NULL, 1, 0) as is_active, 
+   `subscription.id`, 
+   `subscription.original_order_id`, 
+   `subscription.created_at`,
+   `subscription.is_recurring`,
+   `receipt.is_trial`,
+   `receipt.id`
+  FROM (
+    SELECT 
+      u.id as user_id, 
+      s.id as `subscription.id`, 
+      s.original_order_id as `subscription.original_order_id`, 
+      s.created_at as `subscription.created_at`, 
+      s.is_recurring as `subscription.is_recurring`, 
+      sr.is_trial as `receipt.is_trial`, 
+      sr.id as `receipt.id`, 
+      sr.expires_at as `receipt.expires_at`,
+      sr.canceled_at as `receipt.canceled_at`
+    FROM user u
+    LEFT JOIN subscription s on u.id = s.user_id
+    LEFT JOIN subscriptionReceipt sr on s.id = sr.subscription_id
+    WHERE u.id = $ctx.args.user_id
+    ORDER BY `receipt.id` DESC
+  ) as t
+  GROUP BY `subscription.id`
+  ORDER BY `receipt.id` DESC;
+")
+
+{
+  "version": "2018-05-29",
+  "statements": ["$util.escapeJavaScript($statement)"]
+}

@@ -1,0 +1,91 @@
+#set ($statement =
+"SELECT DISTINCT
+ts.id AS ""tourstop_id"",
+NULL AS ""availbility_id"",
+pl.listing_id AS ""listing_id"",
+ts.start_time AS ""start_time"",
+ts.duration AS ""duration"",
+NULL AS ""end_datetime"",
+ts.STATUS AS ""STATUS"",
+ts.tour_id AS ""tour_id"",
+pl.listing_agent_id AS ""listing_agent_id"",
+pl.address AS ""address"",
+pl.is_auto_approve AS ""is_auto_approve"",
+agent.first_name AS ""listingAgent_first_name"",
+agent.last_name AS ""listingAgent_last_name"",
+agent.email_address AS ""listingAgent_email_address"",
+agent.cell_phone AS ""listingAgent_cell_phone"",
+agent.brokerage AS ""listingAgent_brokerage"",
+buyingAgent.first_name AS ""buyingAgent_first_name"",
+buyingAgent.last_name AS ""buyingAgent_last_name"",
+buyingAgent.email_address AS ""buyingAgent_email_address"",
+buyingAgent.brokerage AS ""buyingAgent_brokerage"",
+buyingAgent.cell_phone AS ""buyingAgent_cell_phone"",
+pl.id AS ""property_listing_id"",
+poi.client_id AS ""client_id"",
+poi.id AS ""home_of_interest_id"",
+t.name AS ""tour_name"",
+t.is_behalf_of_buying_agent AS ""is_behalf_of_buying_agent""
+FROM tourStop ts
+INNER JOIN tour t ON t.id = ts.tour_id
+INNER JOIN propertyOfInterest poi ON poi.id = ts.property_of_interest_id
+INNER JOIN propertyListing pl ON pl.id = poi.property_listing_id
+INNER JOIN user agent ON agent.id = pl.listing_agent_id
+INNER JOIN user buyingAgent ON buyingAgent.id = t.agent_id
+WHERE pl.listing_id = ""$ctx.args.listing_id"" AND ts.is_active = TRUE
+")
+
+#if( !$util.isNullOrBlank($ctx.args.start_time))
+#if( !$util.isNullOrBlank($ctx.args.end_datetime) )
+#set ($dateFilterConditionBooked = " AND (ts.start_time BETWEEN $ctx.args.start_time AND $ctx.args.end_datetime)")
+#set ($statement = "$statement$dateFilterConditionBooked")
+#end
+#end
+
+#set ($availableSlots =
+"UNION ALL
+SELECT
+NULL AS ""tourstop_id"",
+laa.id AS ""availbility_id"",
+pl.listing_id AS ""listing_id"",
+laa.start_datetime AS ""start_time"",
+NULL AS ""duration"",
+laa.end_datetime,
+""available"" AS ""STATUS"",
+NULL AS ""tour_id"",
+laa.listing_agent_id AS ""listing_agent_id"",
+pl.address AS ""address"",
+pl.is_auto_approve AS ""is_auto_approve"",
+agent.first_name AS ""listingAgent_first_name"",
+agent.last_name AS ""listingAgent_last_name"",
+agent.email_address ""listingAgent_email_address"",
+agent.cell_phone AS ""listingAgent_cell_phone"",
+agent.brokerage AS ""listingAgent_brokerage"",
+NULL AS ""buyingAgent_first_name"",
+NULL AS ""buyingAgent_last_name"",
+NULL AS ""buyingAgent_email_address"",
+NULL AS ""buyingAgent_cell_phone"",
+NULL AS ""buyingAgent_brokerage"",
+laa.property_listing_id AS ""property_listing_id"",
+NULL AS ""client_id"",
+NULL AS ""home_of_interest_id"",
+NULL AS ""tour_name"",
+NULL AS ""is_behalf_of_buying_agent""
+FROM listingAgentAvailability laa
+INNER JOIN user agent ON agent.id = laa.listing_agent_id
+INNER JOIN propertyListing pl ON pl.id = laa.property_listing_id
+WHERE pl.listing_id = ""$ctx.args.listing_id"" AND laa.is_active = TRUE
+")
+#set ($statement = "$statement$availableSlots")
+
+#if( !$util.isNullOrBlank($ctx.args.start_time))
+#if( !$util.isNullOrBlank($ctx.args.end_datetime) )
+#set ($dateFilterConditionAvailable = " AND (laa.start_datetime BETWEEN $ctx.args.start_time AND $ctx.args.end_datetime)")
+#set ($statement = "$statement$dateFilterConditionAvailable")
+#end
+#end
+
+{
+"version": "2018-05-29",
+"statements": ["$util.escapeJavaScript($statement)"]
+}

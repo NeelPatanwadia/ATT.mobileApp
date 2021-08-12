@@ -1,0 +1,23 @@
+{
+    "Version": 5,
+    "ElasticsearchWarning": true,
+    "StackMapping": {
+        "BatchUpdateTourStopsLambdaDataSourceRole": "FunctionDirectiveStack",
+        "BatchUpdateTourStopsLambdaDataSource": "FunctionDirectiveStack",
+        "InvokeBatchUpdateTourStopsLambdaDataSource": "FunctionDirectiveStack",
+        "MutationbatchUpdateTourStopsResolver": "FunctionDirectiveStack",
+        "ListingTable": "Listing",
+        "ListingIAMRole": "Listing",
+        "ListingDataSource": "Listing",
+        "GetListingResolver": "Listing",
+        "ListListingResolver": "Listing",
+        "CreateListingResolver": "Listing",
+        "UpdateListingResolver": "Listing",
+        "DeleteListingResolver": "Listing",
+        "QuerygetListingByListingIdResolver": "Listing",
+        "QuerylistListingsByListingAgentEmailResolver": "Listing",
+        "GetAttListingTableStreamArn": "Listing",
+        "GetAttListingDataSourceName": "Listing",
+        "GetAttListingTableName": "Listing"
+    }
+}
